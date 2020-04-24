@@ -1,14 +1,14 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, BatchNormalization, MaxPooling2D
 from tensorflow.keras.applications.resnet50 import ResNet50
-from variables import *
+from waste_classifier.variables import *
 
 
 def return_resnet50():
     model = Sequential()
     model.add(ResNet50(include_top=False, pooling='avg', weights='imagenet'))
     model.add(Dense(512, activation='relu'))
-    model.add(Dense(nb_classes, activation='softmax'))
+    model.add(Dense(NB_CLASSES, activation='softmax'))
     model.layers[0].trainable = False
     return model
 
@@ -32,7 +32,7 @@ def return_crafted_model():
     model.add(Dense(256, activation='relu'))
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.3))
-    model.add(Dense(nb_classes, activation='softmax'))
+    model.add(Dense(NB_CLASSES, activation='softmax'))
     return model
 
 

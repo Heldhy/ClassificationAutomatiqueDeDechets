@@ -1,7 +1,7 @@
-from variables import *
+from waste_classifier.variables import *
 import matplotlib.pyplot as plt
-from preprocessing import make_square
-from preprocessing import preprocess_input
+from waste_classifier.pre_processing import make_square
+from waste_classifier.pre_processing import preprocess_input
 
 
 def predict_image(model, path, open=False):
@@ -17,7 +17,7 @@ def predict_image(model, path, open=False):
     idx = p.index(max(p))
     idx2 = p.index(max(p[:idx] + p[idx + 1:]))
     trash = 0 if (idx in {0, 2, 3, 4}) else 1 if idx == 1 else 2
-    print(classes[idx] + ": " + str(max(p) * 100)[:5] + "%")
-    print(classes[idx2] + ": " + str(p[idx2] * 100)[:5] + "%")
+    print(CLASSES[idx] + ": " + str(max(p) * 100)[:5] + "%")
+    print(CLASSES[idx2] + ": " + str(p[idx2] * 100)[:5] + "%")
     print("--")
-    return typesFr[trash]
+    return WASTE_TYPE[trash]

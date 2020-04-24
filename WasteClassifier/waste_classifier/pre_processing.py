@@ -4,7 +4,7 @@ import os
 import matplotlib.pyplot as plt
 from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow.keras.utils import to_categorical
-from variables import *
+from waste_classifier.variables import *
 
 
 def no_preprocessing(data):
@@ -12,7 +12,7 @@ def no_preprocessing(data):
 
 
 def make_square(img, min_size=224):
-    s = max(img.shape[0:2])
+    s = max(img.shape[:2])
     f = np.full((s, s, 3), img.mean(), np.uint8)
     ax, ay = (s - img.shape[1]) // 2, (s - img.shape[0]) // 2
     f[ay:img.shape[0] + ay, ax:ax + img.shape[1]] = img
@@ -28,7 +28,7 @@ def get_preprocessed_data(path, preprocessing_function):
             img = plt.imread(path + i + '/' + j)
             img = make_square(img)
             x_data.append(preprocessing_function(img))
-            y_data.append(class_to_index_dictionnary[i])
+            y_data.append(CLASS_TO_INDEX[i])
     return np.array(x_data), np.array(y_data)
 
 

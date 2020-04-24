@@ -1,7 +1,5 @@
-import models
-import preprocessing
-import data_augmentation
-from variables import *
+from waste_classifier import models
+from waste_classifier.variables import *
 import tensorflow as tf
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.optimizers import RMSprop
@@ -23,8 +21,8 @@ def compile_model(model, optimizer):
 
 def fit(model, train_generator, val_generator, callbacks, epoch):
     model.fit_generator(train_generator,
-                        steps_per_epoch=train_generator.n // BATCH_SIZE,
-                        validation_steps=val_generator.n // BATCH_SIZE,
+                        steps_per_epoch=train_generator.n // batch_size,
+                        validation_steps=val_generator.n // batch_size,
                         epochs=epoch,
                         validation_data=val_generator,
                         callbacks=callbacks,
@@ -45,10 +43,9 @@ def get_optimizer(optimizer_type):
 def training(train_generator, val_generator, x_test, y_test, evaluate=False):
     callbacks = create_callbacks_list()
     optimizer = get_optimizer(optimizer_type)
-    model = models.get_model(modeltype)
+    model = models.get_model(model_type)
     compile_model(model, optimizer)
     fit(model, train_generator, val_generator, callbacks, epoch)
-    del model
     model = load_model(filepath)
     if (evaluate):
         score = evaluate_model(model, x_test, y_test)
