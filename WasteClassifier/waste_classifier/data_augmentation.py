@@ -1,5 +1,5 @@
-from waste_classifier import pre_processing
-from waste_classifier.variables import *
+import pre_processing
+from variables import *
 import matplotlib.pyplot as plt
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 

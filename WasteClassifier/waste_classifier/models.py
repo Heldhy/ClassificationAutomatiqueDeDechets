@@ -1,7 +1,7 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, BatchNormalization, MaxPooling2D
 from tensorflow.keras.applications.resnet50 import ResNet50
-from waste_classifier.variables import *
+from variables import *
 
 
 def return_resnet50():

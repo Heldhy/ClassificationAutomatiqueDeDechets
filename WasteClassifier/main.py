@@ -1,4 +1,7 @@
-from waste_classifier import training, data_augmentation, post_processing, pre_processing
+import data_augmentation
+import post_processing
+import pre_processing
+import training
 
 
 def main():

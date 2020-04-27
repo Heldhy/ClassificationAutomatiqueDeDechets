@@ -1,4 +1,4 @@
-from waste_classifier.variables import *
+from variables import *
 import numpy as np
 from tensorflow.keras.utils import to_categorical
 from sklearn.metrics import accuracy_score, recall_score

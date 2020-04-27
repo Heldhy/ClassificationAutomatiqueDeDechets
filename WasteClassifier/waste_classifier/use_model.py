@@ -1,7 +1,7 @@
-from waste_classifier.variables import *
+from variables import *
 import matplotlib.pyplot as plt
-from waste_classifier.pre_processing import make_square
-from waste_classifier.pre_processing import preprocess_input
+from pre_processing import make_square
+from pre_processing import preprocess_input
 
 
 def predict_image(model, path, open=False):

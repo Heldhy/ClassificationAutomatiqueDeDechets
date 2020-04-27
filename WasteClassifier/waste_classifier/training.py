@@ -1,5 +1,5 @@
-from waste_classifier import models
-from waste_classifier.variables import *
+import models
+from variables import *
 import tensorflow as tf
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.optimizers import RMSprop

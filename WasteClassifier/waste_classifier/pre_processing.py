@@ -4,7 +4,7 @@ import os
 import matplotlib.pyplot as plt
 from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow.keras.utils import to_categorical
-from waste_classifier.variables import *
+from variables import *
 
 
 def no_preprocessing(data):

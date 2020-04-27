@@ -10,5 +10,5 @@ setup(
     author='danae',
     author_email='danae.marmai@octo.com',
     description='A package to predict the type of waste from a picture',
-    install_requires=['tensorflow', 'matplotlib', 'scikit-learn', 'numpy']
+    install_requires=['tensorflow', 'matplotlib', 'scikit-learn', 'numpy', 'opencv-python']
 )
