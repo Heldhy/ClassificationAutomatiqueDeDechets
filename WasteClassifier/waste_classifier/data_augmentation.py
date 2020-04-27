@@ -18,7 +18,7 @@ def create_generator(x_train, y_train):
     return train_generator, val_generator
 
 
-def print_generated_batch(generator, batch_number):
+def save_generated_batch(generator, batch_number, path="batch_image/"):
     i = 0
     for X_batch, y_batch in generator:
         if (i == batch_number):
@@ -28,6 +28,6 @@ def print_generated_batch(generator, batch_number):
                 fig.set_title(CLASSES[y_batch[i].tolist().index(1.0)])
                 plt.tight_layout()
                 plt.imshow(X_batch[i].reshape(HEIGHT, WIDTH, 3))
-            plt.show()
+            plt.savefig(path + "batch" + str(batch_number))
             return
         i += 1

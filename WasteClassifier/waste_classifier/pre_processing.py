@@ -12,11 +12,13 @@ def no_preprocessing(data):
 
 
 def make_square(img, min_size=224):
-    s = max(img.shape[:2])
-    f = np.full((s, s, 3), img.mean(), np.uint8)
-    ax, ay = (s - img.shape[1]) // 2, (s - img.shape[0]) // 2
-    f[ay:img.shape[0] + ay, ax:ax + img.shape[1]] = img
-    return cv2.resize(f, (min_size, min_size), interpolation=cv2.INTER_AREA)
+    height = img.shape[0]
+    width = img.shape[1]
+    largest_dimension = max(img.shape)
+    squared_image = np.full((largest_dimension, largest_dimension, 3), img.mean(), np.uint8)
+    top_left_corner_x, top_left_corner_y = (largest_dimension - width) // 2, (largest_dimension - height) // 2
+    squared_image[top_left_corner_y:height + top_left_corner_y, top_left_corner_x:width + top_left_corner_x] = img
+    return cv2.resize(squared_image, (min_size, min_size), interpolation=cv2.INTER_AREA)
 
 
 def get_preprocessed_data(path, preprocessing_function):
