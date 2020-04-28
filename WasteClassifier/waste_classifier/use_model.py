@@ -6,11 +6,8 @@ from pre_processing import preprocess_input
 from variables import *
 
 
-def predict_image(model, path, open=False):
-    if (not open):
-        img = plt.imread(path)
-    else:
-        img = path
+def predict_image(model, path):
+    img = plt.imread(path)
     img = preprocess_input(make_square(img))
     pred = model.predict(img.reshape((1, HEIGHT, WIDTH, 3)))
     prediction_list = pred.tolist()[0]

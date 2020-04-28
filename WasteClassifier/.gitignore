@@ -3,5 +3,6 @@ __pycache__/
 .idea
 build/
 venv/
-batch_images/
+batch_images
 .pytest_cache
+*.h5

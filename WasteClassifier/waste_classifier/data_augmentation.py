@@ -18,8 +18,11 @@ def create_generator(x_train, y_train):
     return train_generator, val_generator
 
 
-def save_generated_batch(generator, batch_number, path="batch_image/"):
+def save_generated_batch(generator, batch_number, path="batch_images"):
     i = 0
+    p = pth.Path(path)
+    if(not p.exists()):
+        p.mkdir(parents=True)
     for X_batch, y_batch in generator:
         if (i == batch_number):
             f = plt.figure(figsize=(20, 20))
@@ -28,6 +31,6 @@ def save_generated_batch(generator, batch_number, path="batch_image/"):
                 fig.set_title(CLASSES[y_batch[i].tolist().index(1.0)])
                 plt.tight_layout()
                 plt.imshow(X_batch[i].reshape(HEIGHT, WIDTH, 3))
-            plt.savefig(path + "batch" + str(batch_number))
+            plt.savefig((p / ("batch" + str(batch_number))))
             return
         i += 1

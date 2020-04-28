@@ -1,5 +1,3 @@
-import os
-
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
@@ -26,19 +24,20 @@ def make_square(img, min_size=224):
 def get_preprocessed_data(path, preprocessing_function):
     x_data = []
     y_data = []
-    files_in_train = sorted(os.listdir(path))
-    for i in files_in_train:
-        for j in sorted(os.listdir(path + i)):
-            img = plt.imread(path + i + '/' + j)
+    p = pth.Path(path)
+    files = sorted(p.iterdir())
+    for i in files:
+        for j in sorted(i.iterdir()):
+            img = plt.imread(j)
             img = make_square(img)
             x_data.append(preprocessing_function(img))
-            y_data.append(CLASS_TO_INDEX[i])
+            y_data.append(CLASS_TO_INDEX[i.name])
     return np.array(x_data), np.array(y_data)
 
 
 def get_data():
-    train_folder = BASE_DIR + 'train/'
-    test_folder = BASE_DIR + 'test/'
+    train_folder = BASE_DIR / 'train'
+    test_folder = BASE_DIR / 'test'
     x_train, y_train = get_preprocessed_data(train_folder, no_preprocessing)
     x_test, y_test = get_preprocessed_data(test_folder, preprocess_input)
     return x_train, y_train, x_test, y_test
