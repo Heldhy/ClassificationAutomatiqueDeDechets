@@ -1,9 +1,10 @@
-import models
-from variables import *
 import tensorflow as tf
 from tensorflow.keras.callbacks import ModelCheckpoint
-from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.models import load_model
+from tensorflow.keras.optimizers import RMSprop
+
+import models
+from variables import *
 
 
 def create_callbacks_list():

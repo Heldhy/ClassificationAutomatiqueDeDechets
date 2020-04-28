@@ -1,4 +1,4 @@
-from .training import  *
+from .training import *
 from .data_augmentation import *
 from .models import *
 from .models import *

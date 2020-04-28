@@ -1,8 +1,9 @@
-from variables import *
 import matplotlib.pyplot as plt
+import numpy as np
+
 from pre_processing import make_square
 from pre_processing import preprocess_input
-import numpy as np
+from variables import *
 
 
 def predict_image(model, path, open=False):

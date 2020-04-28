@@ -1,9 +1,11 @@
-import numpy as np
-import cv2
 import os
+
+import cv2
 import matplotlib.pyplot as plt
+import numpy as np
 from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow.keras.utils import to_categorical
+
 from variables import *
 
 
