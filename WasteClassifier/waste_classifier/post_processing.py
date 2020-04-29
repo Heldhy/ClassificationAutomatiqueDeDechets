@@ -4,8 +4,7 @@ from tensorflow.keras.utils import to_categorical
 from sklearn.metrics import accuracy_score, recall_score
 
 
-def convert_to_trash(model, x, y):
-    prediction = model.predict(x)
+def convert_to_trash(prediction,  y):
     y_predicted = []
     y_true = []
     for i in range(len(prediction)):
@@ -18,8 +17,13 @@ def convert_to_trash(model, x, y):
     return y_predicted, y_true
 
 
+def predict_and_convert_to_trash(model, x, y):
+    prediction = model.predict(x)
+    return convert_to_trash(prediction, y)
+
+
 def evaluate_post_processed_prediction(model, x, y):
-    y_predicted, y_true = convert_to_trash(model, x, y)
+    y_predicted, y_true = predict_and_convert_to_trash(model, x, y)
     accuracy = accuracy_score(y_true, y_predicted)
     recall = recall_score(y_true, y_predicted, average='macro')
     print("accuracy : " + str(accuracy))
