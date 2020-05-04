@@ -1,7 +1,10 @@
-import pre_processing
-from variables import *
-import matplotlib.pyplot as plt
+from pathlib import Path
+
+from matplotlib.pyplot import figure, tight_layout, imshow, savefig
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.python.keras.applications.resnet import preprocess_input
+
+from waste_classifier import batch_size, CLASSES, HEIGHT, WIDTH
 
 
 def create_generator(x_train, y_train):
@@ -11,7 +14,7 @@ def create_generator(x_train, y_train):
                                  height_shift_range=0.1,
                                  shear_range=0.5,
                                  zoom_range=(0.9, 1.1),
-                                 preprocessing_function=pre_processing.preprocess_input)
+                                 preprocessing_function=preprocess_input)
     datagen.fit(x_train)
     train_generator = datagen.flow(x_train, y_train, batch_size=batch_size, subset='training')
     val_generator = datagen.flow(x_train, y_train, batch_size=batch_size, subset='validation')
@@ -20,17 +23,17 @@ def create_generator(x_train, y_train):
 
 def save_generated_batch(generator, batch_number, path="batch_images"):
     i = 0
-    p = pth.Path(path)
+    p = Path(path)
     if(not p.exists()):
         p.mkdir(parents=True)
     for X_batch, y_batch in generator:
         if (i == batch_number):
-            f = plt.figure(figsize=(20, 20))
+            f = figure(figsize=(20, 20))
             for i in range(0, batch_size):
                 fig = f.add_subplot(batch_size // 8, 8, i + 1)
                 fig.set_title(CLASSES[y_batch[i].tolist().index(1.0)])
-                plt.tight_layout()
-                plt.imshow(X_batch[i].reshape(HEIGHT, WIDTH, 3))
-            plt.savefig((p / ("batch" + str(batch_number))))
+                tight_layout()
+                imshow(X_batch[i].reshape(HEIGHT, WIDTH, 3))
+            savefig((p / ("batch" + str(batch_number))))
             return
         i += 1

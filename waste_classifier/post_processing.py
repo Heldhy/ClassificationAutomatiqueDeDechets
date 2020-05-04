@@ -1,7 +1,8 @@
-from variables import *
 import numpy as np
 from tensorflow.keras.utils import to_categorical
 from sklearn.metrics import accuracy_score, recall_score
+
+from waste_classifier import CLASSES, CLASSES_TO_TRASH
 
 
 def convert_to_trash(prediction,  y):

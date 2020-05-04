@@ -3,8 +3,7 @@ from setuptools import setup
 setup(
     name='WasteClassifier',
     version='1.0.0',
-    packages=[''],
-    package_dir={'': 'waste_classifier'},
+    packages= find_packages(exclude=['tests.*', 'tests']),
     url='',
     license='',
     author='danae',

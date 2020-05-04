@@ -4,7 +4,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import RMSprop
 
 import models
-from variables import *
+from waste_classifier import filepath, optimizer_type, model_type, epoch, batch_size
 
 
 def create_callbacks_list():

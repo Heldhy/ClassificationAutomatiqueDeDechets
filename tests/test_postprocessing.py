@@ -1,6 +1,6 @@
-import post_processing
 import numpy as np
-from post_processing import to_categorical
+
+from waste_classifier import convert_to_trash
 
 
 def test_convert_to_trash_returns_only_3_categories():
@@ -11,11 +11,11 @@ def test_convert_to_trash_returns_only_3_categories():
     y = to_categorical(y, 6)
 
     # When
-    y_pred_trash, y_trash = post_processing.convert_to_trash(y_pred, y)
+    y_pred_trash, y_trash = convert_to_trash(y_pred, y)
 
     # Then
-    assert(y_pred_trash.shape[1] == 3)
-    assert(y_trash.shape[1] == 3)
+    assert y_pred_trash.shape[1] == 3
+    assert y_trash.shape[1] == 3
     
 
 def test_convert_to_trash_cardboard_converted_to_recyclable():
@@ -28,11 +28,11 @@ def test_convert_to_trash_cardboard_converted_to_recyclable():
     expected_result = to_categorical(np.full((100, 1), 0), 3)
 
     # When
-    y_pred_trash, y_trash = post_processing.convert_to_trash(y_pred, y)
+    y_pred_trash, y_trash = convert_to_trash(y_pred, y)
 
     # Then
-    assert(np.array_equal(np.round(y_pred_trash), expected_result))
-    assert(np.array_equal(np.round(y_trash), expected_result))
+    assert np.array_equal(np.round(y_pred_trash), expected_result)
+    assert np.array_equal(np.round(y_trash), expected_result)
 
 
 def test_convert_to_trash_glass_converted_to_verre():
@@ -45,7 +45,7 @@ def test_convert_to_trash_glass_converted_to_verre():
     expected_result = to_categorical(np.full((100, 1), 1), 3)
 
     # When
-    y_pred_trash, y_trash = post_processing.convert_to_trash(y_pred, y)
+    y_pred_trash, y_trash = convert_to_trash(y_pred, y)
 
     # Then
     assert(np.array_equal(np.round(y_pred_trash), expected_result))
@@ -62,11 +62,11 @@ def test_convert_to_trash_metal_converted_to_recyclable():
     expected_result = to_categorical(np.full((100, 1), 0), 3)
 
     # When
-    y_pred_trash, y_trash = post_processing.convert_to_trash(y_pred, y)
+    y_pred_trash, y_trash = convert_to_trash(y_pred, y)
 
     # Then
-    assert(np.array_equal(np.round(y_pred_trash), expected_result))
-    assert(np.array_equal(np.round(y_trash), expected_result))
+    assert np.array_equal(np.round(y_pred_trash), expected_result)
+    assert np.array_equal(np.round(y_trash), expected_result)
 
 
 def test_convert_to_trash_paper_converted_to_recyclable():
@@ -79,11 +79,11 @@ def test_convert_to_trash_paper_converted_to_recyclable():
     expected_result = to_categorical(np.full((100, 1), 0), 3)
 
     # When
-    y_pred_trash, y_trash = post_processing.convert_to_trash(y_pred, y)
+    y_pred_trash, y_trash = convert_to_trash(y_pred, y)
 
     # Then
-    assert(np.array_equal(np.round(y_pred_trash), expected_result))
-    assert(np.array_equal(np.round(y_trash), expected_result))
+    assert np.array_equal(np.round(y_pred_trash), expected_result)
+    assert np.array_equal(np.round(y_trash), expected_result)
 
 
 def test_convert_to_trash_plastic_converted_to_recyclable():
@@ -96,11 +96,11 @@ def test_convert_to_trash_plastic_converted_to_recyclable():
     expected_result = to_categorical(np.full((100, 1), 0), 3)
 
     # When
-    y_pred_trash, y_trash = post_processing.convert_to_trash(y_pred, y)
+    y_pred_trash, y_trash = convert_to_trash(y_pred, y)
 
     # Then
-    assert(np.array_equal(np.round(y_pred_trash), expected_result))
-    assert(np.array_equal(np.round(y_trash), expected_result))
+    assert np.array_equal(np.round(y_pred_trash), expected_result)
+    assert np.array_equal(np.round(y_trash), expected_result)
 
 
 def test_convert_to_trash_trash_converted_to_non_recyclable():
@@ -113,8 +113,8 @@ def test_convert_to_trash_trash_converted_to_non_recyclable():
     expected_result = to_categorical(np.full((100, 1), 2), 3)
 
     # When
-    y_pred_trash, y_trash = post_processing.convert_to_trash(y_pred, y)
+    y_pred_trash, y_trash = convert_to_trash(y_pred, y)
 
     # Then
-    assert(np.array_equal(np.round(y_pred_trash), expected_result))
-    assert(np.array_equal(np.round(y_trash), expected_result))
+    assert np.array_equal(np.round(y_pred_trash), expected_result)
+    assert np.array_equal(np.round(y_trash), expected_result)

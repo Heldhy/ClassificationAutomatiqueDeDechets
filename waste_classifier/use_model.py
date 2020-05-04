@@ -1,13 +1,13 @@
-import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.pyplot import imread
 
 from pre_processing import make_square
 from pre_processing import preprocess_input
-from variables import *
+from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE
 
 
 def predict_image(model, path):
-    img = plt.imread(path)
+    img = imread(path)
     img = preprocess_input(make_square(img))
     pred = model.predict(img.reshape((1, HEIGHT, WIDTH, 3)))
     prediction_list = pred.tolist()[0]
