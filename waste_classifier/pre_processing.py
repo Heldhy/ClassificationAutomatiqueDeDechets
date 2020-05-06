@@ -37,16 +37,18 @@ def get_preprocessed_data(path, pre_processing_function):
     return np.array(x_data), np.array(y_data)
 
 
-def get_data():
-    train_folder = BASE_DIR / 'train'
-    test_folder = BASE_DIR / 'test'
+def get_data(directory):
+    train_folder = directory/ 'train'
+    test_folder = directory / 'test'
     x_train, y_train = get_preprocessed_data(train_folder, no_pre_processing)
     x_test, y_test = get_preprocessed_data(test_folder, preprocess_input)
     return x_train, y_train, x_test, y_test
 
 
-def pre_processing():
-    x_train, y_train, x_test, y_test = get_data()
+def pre_processing(directory=None):
+    if(directory is None):
+        directory = BASE_DIR
+    x_train, y_train, x_test, y_test = get_data(directory)
     y_train = to_categorical(y_train)
     y_test = to_categorical(y_test)
     idx = np.random.permutation(len(y_train))
