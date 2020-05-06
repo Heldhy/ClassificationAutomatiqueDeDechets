@@ -1,4 +1,5 @@
 from waste_classifier import make_square
+import numpy as np
 
 
 def test_make_square_of_a_squared_picture():
@@ -13,7 +14,7 @@ def test_make_square_of_a_squared_picture():
     assert squared.shape == (224, 224, 3)
 
 
-def test_make_square_does_not_change_squared_picture_if_the_size_is_already_the_target_one():
+def test_make_square_does_not_change_squared_picture_if_the_size_is_already_the_targeted_one():
     # Given
     randnum = np.random.randint(0, 255, 7500)
     img = randnum.reshape((50, 50, 3))
@@ -22,7 +23,7 @@ def test_make_square_does_not_change_squared_picture_if_the_size_is_already_the_
     squared = make_square(img, 50)
 
     # Then
-    assert (squared == img).all()
+    assert np.array_equal(squared, img)
 
 
 def test_make_square_of_a_rectangle_image():
@@ -46,7 +47,7 @@ def test_make_square_not_only_one_color_for_a_rectangle():
     squared = make_square(img)
 
     # Then
-    assert (np.mean(squared, axis=0) != squared[112, 112]).all()
+    assert not np.array_equal(np.mean(squared, axis=0), squared[112, 112])
 
 
 def test_make_square_not_only_one_color_for_a_square():
@@ -58,7 +59,7 @@ def test_make_square_not_only_one_color_for_a_square():
     squared = make_square(img)
 
     # Then
-    assert (np.mean(squared, axis=0) != squared[112, 112]).all()
+    assert not np.array_equal(np.mean(squared, axis=0), squared[112, 112])
 
 
 def test_make_square_two_different_pictures_are_different():

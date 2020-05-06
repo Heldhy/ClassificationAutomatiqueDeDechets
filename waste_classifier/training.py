@@ -3,7 +3,6 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import RMSprop
 
-import models
 from waste_classifier import filepath, optimizer_type, model_type, epoch, batch_size
 
 

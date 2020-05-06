@@ -1,13 +1,5 @@
 from pathlib import Path
 
-from .training import *
-from .data_augmentation import *
-from .models import *
-from .models import *
-from .post_processing import *
-from .pre_processing import *
-from .use_model import *
-
 CLASSES = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
 WASTE_TYPE = ['recyclable', 'verre', 'non recyclable']
 CLASSES_TO_TRASH = {'cardboard': 0, 'glass': 1, 'metal': 0, 'paper': 0, 'plastic': 0, 'trash': 2}
@@ -21,3 +13,11 @@ epoch = 2
 filepath = "bestmodel.h5"
 model_type = "resnet50"
 optimizer_type = "rmsprop"
+
+from .training import *
+from .data_augmentation import *
+from .models import *
+from .models import *
+from .post_processing import *
+from .pre_processing import *
+from .use_model import *
