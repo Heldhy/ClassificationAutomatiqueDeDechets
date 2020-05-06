@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open("requirements.txt", "r") as requirement_file:
     requirements = requirement_file.read().split()
@@ -6,7 +6,7 @@ with open("requirements.txt", "r") as requirement_file:
 setup(
     name='WasteClassifier',
     version='1.0.0',
-    packages= find_packages(exclude=['tests.*', 'tests']),
+    packages=find_packages(exclude=['tests.*', 'tests']),
     url='',
     license='',
     author='danae',
