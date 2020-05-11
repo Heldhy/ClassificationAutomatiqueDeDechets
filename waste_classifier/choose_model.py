@@ -7,12 +7,19 @@ from tensorflow.python.keras.models import Sequential
 from waste_classifier import NB_CLASSES, HEIGHT, WIDTH
 
 
-def return_vgg16():
+def return_vgg16_freezed():
     model = Sequential()
     new_input = Input(shape=(HEIGHT, WIDTH, 3))
     model.add(VGG16(include_top=False, input_tensor=new_input, weights="imagenet", pooling='avg'))
     model.add(Dense(NB_CLASSES, activation='softmax'))
     model.layers[0].trainable = False
+    return model
+
+def return_vgg16():
+    model = Sequential()
+    new_input = Input(shape=(HEIGHT, WIDTH, 3))
+    model.add(VGG16(include_top=False, input_tensor=new_input, weights="imagenet", pooling='avg'))
+    model.add(Dense(NB_CLASSES, activation='softmax'))
     return model
 
 
@@ -55,4 +62,6 @@ def get_model(model):
         return return_crafted_model()
     if (model == "vgg16"):
         return return_vgg16()
+    if (model == "vgg16_freezed"):
+        return return_vgg16_freezed()
     return None
