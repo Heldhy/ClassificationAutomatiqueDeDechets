@@ -16,7 +16,7 @@ optimizer_type = "rmsprop"
 
 
 from .pre_processing import *
-from .models import *
+from .choose_model import *
 from .data_augmentation import *
 from .training import *
 from .post_processing import *
