@@ -15,9 +15,9 @@ model_type = "resnet50"
 optimizer_type = "rmsprop"
 
 
-from .models import *
-from .training import *
-from .data_augmentation import *
-from .post_processing import *
 from .pre_processing import *
+from .models import *
+from .data_augmentation import *
+from .training import *
+from .post_processing import *
 from .use_model import *
