@@ -3,7 +3,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import RMSprop
 
-from waste_classifier import filepath, optimizer_type, model_type, epoch, batch_size
+from waste_classifier import filepath, optimizer_type, model_type, epoch, batch_size, get_model
 
 
 def create_callbacks_list():
@@ -43,7 +43,7 @@ def get_optimizer(optimizer_type):
 def training(train_generator, val_generator, x_test, y_test, evaluate=False):
     callbacks = create_callbacks_list()
     optimizer = get_optimizer(optimizer_type)
-    model = models.get_model(model_type)
+    model = get_model(model_type)
     compile_model(model, optimizer)
     fit(model, train_generator, val_generator, callbacks, epoch)
     model = load_model(filepath)
