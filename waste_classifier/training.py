@@ -40,10 +40,12 @@ def get_optimizer(optimizer_type):
     return None
 
 
-def training(train_generator, val_generator, x_test, y_test, evaluate=False):
+def training(train_generator, val_generator, x_test, y_test, chosen_model=None, evaluate=False):
+    if(chosen_model is None):
+        chosen_model = model_type
     callbacks = create_callbacks_list()
     optimizer = get_optimizer(optimizer_type)
-    model = get_model(model_type)
+    model = get_model(chosen_model)
     compile_model(model, optimizer)
     fit(model, train_generator, val_generator, callbacks, epoch)
     model = load_model(filepath)
