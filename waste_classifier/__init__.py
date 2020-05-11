@@ -14,9 +14,10 @@ filepath = "bestmodel.h5"
 model_type = "resnet50"
 optimizer_type = "rmsprop"
 
+
+from .models import *
 from .training import *
 from .data_augmentation import *
-from .models import *
 from .post_processing import *
 from .pre_processing import *
 from .use_model import *
