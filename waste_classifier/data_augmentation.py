@@ -4,17 +4,19 @@ from matplotlib.pyplot import figure, tight_layout, imshow, savefig
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.python.keras.applications.resnet import preprocess_input
 
-from waste_classifier import batch_size, CLASSES, HEIGHT, WIDTH
+from waste_classifier import batch_size, CLASSES, HEIGHT, WIDTH, model_type, return_preprocessing_function
 
 
-def create_generator(x_train, y_train):
+def create_generator(x_train, y_train, type_of_model=None):
+    if (type_of_model is None):
+        type_of_model = model_type
     datagen = ImageDataGenerator(rotation_range=20,
                                  validation_split=0.2,
                                  width_shift_range=0.1,
                                  height_shift_range=0.1,
                                  shear_range=0.5,
                                  zoom_range=(0.9, 1.1),
-                                 preprocessing_function=preprocess_input)
+                                 preprocessing_function=return_preprocessing_function(type_of_model))
     datagen.fit(x_train)
     train_generator = datagen.flow(x_train, y_train, batch_size=batch_size, subset='training')
     val_generator = datagen.flow(x_train, y_train, batch_size=batch_size, subset='validation')
