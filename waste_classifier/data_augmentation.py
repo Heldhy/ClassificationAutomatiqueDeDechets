@@ -2,7 +2,6 @@ from pathlib import Path
 
 from matplotlib.pyplot import figure, tight_layout, imshow, savefig
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.python.keras.applications.resnet import preprocess_input
 
 from waste_classifier import batch_size, CLASSES, HEIGHT, WIDTH, model_type, return_preprocessing_function
 
