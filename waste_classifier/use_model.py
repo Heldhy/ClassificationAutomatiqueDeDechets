@@ -2,13 +2,15 @@ import numpy as np
 from matplotlib.pyplot import imread
 
 from pre_processing import make_square
-from pre_processing import preprocess_input
-from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE
+from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE, return_preprocessing_function, model_type
 
 
-def predict_image(model, path):
+def predict_image(model, path, type_of_model=None):
+    if (type_of_model is None):
+        type_of_model = model_type
     img = imread(path)
-    img = preprocess_input(make_square(img))
+    pre_processing_function = return_preprocessing_function(type_of_model)
+    img = pre_processing_function(make_square(img))
     pred = model.predict(img.reshape((1, HEIGHT, WIDTH, 3)))
     prediction_list = pred.tolist()[0]
     max_index = np.argmax(pred)
