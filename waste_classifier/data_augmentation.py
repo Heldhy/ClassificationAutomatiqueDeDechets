@@ -6,7 +6,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from waste_classifier import batch_size, CLASSES, HEIGHT, WIDTH, model_type, return_preprocessing_function
 
 
-def create_generator(x_train, y_train, type_of_model=None):
+def create_new_generator(x_train, y_train, type_of_model=None):
     if (type_of_model is None):
         type_of_model = model_type
     datagen = ImageDataGenerator(rotation_range=20,
