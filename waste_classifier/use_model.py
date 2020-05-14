@@ -1,8 +1,7 @@
 import numpy as np
 from matplotlib.pyplot import imread
 
-from pre_processing import make_square
-from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE, return_preprocessing_function, model_type
+from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE, return_preprocessing_function, model_type, make_square
 
 
 def predict_image(model, path, type_of_model=None):
