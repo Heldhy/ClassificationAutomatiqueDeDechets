@@ -8,6 +8,10 @@ from tensorflow.python.keras.models import Sequential
 from waste_classifier import NB_CLASSES, HEIGHT, WIDTH
 
 
+def bootleneck_feature_extractor(train_generator):
+    model = VGG16()
+    return None
+
 def return_mobilenet():
     model = Sequential()
     new_input = Input(shape=(HEIGHT, WIDTH, 3))
