@@ -1,7 +1,4 @@
 from pathlib import Path
-from sys import path
-
-path.insert(0,'.')
 
 CLASSES = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
 WASTE_TYPE = ['recyclable', 'verre', 'non recyclable']
