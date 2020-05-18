@@ -1,3 +1,4 @@
+from sklearn.svm import SVC
 from tensorflow.python.keras import Input
 from tensorflow.python.keras.applications.mobilenet import MobileNet
 from tensorflow.python.keras.applications.resnet import ResNet50
@@ -8,9 +9,15 @@ from tensorflow.python.keras.models import Sequential
 from waste_classifier import NB_CLASSES, HEIGHT, WIDTH
 
 
-def bootleneck_feature_extractor(train_generator):
-    model = VGG16()
-    return None
+def return_svc():
+    return SVC()
+
+
+def bootleneck_feature_extractor():
+    new_input = Input(shape=(224, 224, 3))
+    vgg = VGG16(include_top=False, input_tensor=new_input)
+    return vgg
+
 
 def return_mobilenet():
     model = Sequential()
@@ -80,4 +87,6 @@ def get_model(model):
         return return_vgg16_freezed()
     if (model == "mobilenet"):
         return return_mobilenet()
+    if (model == "svc"):
+        return return_svc()
     return None

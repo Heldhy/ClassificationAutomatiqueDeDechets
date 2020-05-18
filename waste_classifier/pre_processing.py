@@ -5,7 +5,7 @@ from cv2.cv2 import INTER_AREA, resize
 from matplotlib.pyplot import imread
 from tensorflow.keras.applications import resnet50
 from tensorflow.keras.utils import to_categorical
-from tensorflow.python.keras.applications import mobilenet
+from tensorflow.python.keras.applications import mobilenet, vgg16
 
 from waste_classifier import CLASS_TO_INDEX, BASE_DIR, model_type
 
@@ -13,8 +13,9 @@ from waste_classifier import CLASS_TO_INDEX, BASE_DIR, model_type
 def return_preprocessing_function(type_of_model):
     if(type_of_model == "mobilenet"):
         return mobilenet.preprocess_input
-    else:
-        return resnet50.preprocess_input
+    if(type_of_model == "vgg16"):
+        return vgg16.preprocess_input
+    return resnet50.preprocess_input
 
 
 def no_pre_processing(data):

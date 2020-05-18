@@ -11,7 +11,7 @@ HEIGHT = 224
 batch_size = 32
 epoch = 30
 filepath = "bestmodel.h5"
-model_type = "mobilenet"
+model_type = "svc"
 optimizer_type = "rmsprop"
 
 
