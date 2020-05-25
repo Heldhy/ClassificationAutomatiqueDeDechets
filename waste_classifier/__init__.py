@@ -8,10 +8,10 @@ NB_CLASSES = 6
 BASE_DIR = Path('.') / 'data' / "dataset-resized"
 WIDTH = 224
 HEIGHT = 224
-batch_size = 32
-epoch = 30
+batch_size = 64
+epoch = 60
 filepath = "bestmodel.h5"
-model_type = "svc"
+model_type = "mobilenet"
 optimizer_type = "rmsprop"
 
 
