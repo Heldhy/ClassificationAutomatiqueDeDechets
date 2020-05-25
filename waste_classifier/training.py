@@ -90,7 +90,7 @@ def training_extractor(x_train, y_train, x_test, y_test, chosen_model=None, eval
     y_train = data_generator.y[:nb_train_sample]
     y_train = argmax(y_train, axis = 1)
     features_reshaped = features.reshape((nb_train_sample, -1))
-    model.fit(features_reshaped, y_train)
+    history = model.fit(features_reshaped, y_train)
     if(evaluate):
         test_features = extract_test_features(x_test)
         if(saving):
@@ -101,7 +101,7 @@ def training_extractor(x_train, y_train, x_test, y_test, chosen_model=None, eval
         accuracy = accuracy_score(y_test_converted, y_pred)
         print("accuracy : " + str(accuracy))
         print("recall : " + str(recall))
-    return model
+    return model, history
 
 
 def training(train_generator, val_generator, x_test, y_test, chosen_model=None, evaluate=False, extractor=False):
