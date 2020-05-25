@@ -39,13 +39,14 @@ def compile_model(model, optimizer):
 
 
 def fit(model, train_generator, val_generator, callbacks, epoch):
-    model.fit_generator(train_generator,
+    history = model.fit_generator(train_generator,
                         steps_per_epoch=train_generator.n // batch_size,
                         validation_steps=val_generator.n // batch_size,
                         epochs=epoch,
                         validation_data=val_generator,
                         callbacks=callbacks,
                         use_multiprocessing=False)
+    return history
 
 
 def evaluate_model(model, x_test, y_test):
@@ -90,7 +91,7 @@ def training_extractor(x_train, y_train, x_test, y_test, chosen_model=None, eval
     y_train = data_generator.y[:nb_train_sample]
     y_train = argmax(y_train, axis = 1)
     features_reshaped = features.reshape((nb_train_sample, -1))
-    history = model.fit(features_reshaped, y_train)
+    model.fit(features_reshaped, y_train)
     if(evaluate):
         test_features = extract_test_features(x_test)
         if(saving):
@@ -101,7 +102,7 @@ def training_extractor(x_train, y_train, x_test, y_test, chosen_model=None, eval
         accuracy = accuracy_score(y_test_converted, y_pred)
         print("accuracy : " + str(accuracy))
         print("recall : " + str(recall))
-    return model, history
+    return model
 
 
 def training(train_generator, val_generator, x_test, y_test, chosen_model=None, evaluate=False, extractor=False):
@@ -111,11 +112,11 @@ def training(train_generator, val_generator, x_test, y_test, chosen_model=None, 
     callbacks = create_callbacks_list()
     optimizer = get_optimizer(optimizer_type)
     compile_model(model, optimizer)
-    fit(model, train_generator, val_generator, callbacks, epoch)
+    history = fit(model, train_generator, val_generator, callbacks, epoch)
     model = load_model(filepath)
     if (evaluate):
         score = evaluate_model(model, x_test, y_test)
         print('Test score:', score[0])
         print('Test accuracy:', score[1])
         print('Test recall:', score[2])
-    return model
+    return model, history
