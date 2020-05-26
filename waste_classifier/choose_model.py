@@ -24,7 +24,7 @@ def return_mobilenet():
     model = Sequential()
     shape = (HEIGHT, WIDTH, 3)
     new_input = Input(shape=shape)
-    model.add(MobileNetV2(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg", input_shape=shape))
+    model.add(MobileNet(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg", input_shape=shape))
     model.add(Dense(NB_CLASSES, activation='softmax'))
     return model
 
