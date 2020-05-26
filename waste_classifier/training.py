@@ -9,7 +9,8 @@ from tensorflow.python.keras.applications import vgg16
 from tensorflow.python.keras.utils.np_utils import to_categorical
 
 from waste_classifier import filepath, optimizer_type, model_type, epoch, batch_size, get_model, \
-    bootleneck_feature_extractor, create_only_one_generator_for_feature_extraction, no_pre_processing, NB_CLASSES
+    bootleneck_feature_extractor, create_only_one_generator_for_feature_extraction, no_pre_processing, NB_CLASSES, \
+    return_frozen_mobilenetV2, build_hybrid_model
 
 
 def extract_train_features(x_train, y_train):
@@ -105,7 +106,23 @@ def training_extractor(x_train, y_train, x_test, y_test, chosen_model=None, eval
     return model
 
 
-def training(train_generator, val_generator, x_test, y_test, chosen_model=None, evaluate=False, extractor=False):
+def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
+    base_model = return_frozen_mobilenetV2()
+    model = build_hybrid_model(base_model)
+    callbacks = create_callbacks_list()
+    optimizer = get_optimizer(optimizer_type)
+    compile_model(model, optimizer)
+    history = fit(model, train_generator, val_generator, callbacks, epoch)
+    model = load_model(filepath)
+    if (evaluate):
+        score = evaluate_model(model, x_test, y_test)
+        print('Test score:', score[0])
+        print('Test accuracy:', score[1])
+        print('Test recall:', score[2])
+    return model, history
+
+
+def training(train_generator, val_generator, x_test, y_test, chosen_model=None, evaluate=False):
     if(chosen_model is None):
         chosen_model = model_type
     model = get_model(chosen_model)

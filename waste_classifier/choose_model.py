@@ -14,17 +14,41 @@ def return_svc():
     return SVC()
 
 
+def build_hybrid_model(base_model):
+    model = Sequential()
+    model.add(base_model)
+    model.add(Dense(1024, activation='relu'))
+    model.add(Dense(1024, activation='relu'))
+    model.add(Dense(512, activation='relu'))
+    model.add(Dense(NB_CLASSES, activation='softmax'))
+    return model
+
+
 def bootleneck_feature_extractor():
     new_input = Input(shape=(224, 224, 3))
     vgg = VGG16(include_top=False, input_tensor=new_input)
     return vgg
 
+def return_frozen_mobilenetV2():
+    shape = (HEIGHT, WIDTH, 3)
+    new_input = Input(shape=shape)
+    base_model = MobileNet(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg", input_shape=shape)
+    base_model.trainable = False
+    return base_model
 
 def return_mobilenet():
     model = Sequential()
     shape = (HEIGHT, WIDTH, 3)
     new_input = Input(shape=shape)
     model.add(MobileNet(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg", input_shape=shape))
+    model.add(Dense(NB_CLASSES, activation='softmax'))
+    return model
+
+def return_mobilenetV2():
+    model = Sequential()
+    shape = (HEIGHT, WIDTH, 3)
+    new_input = Input(shape=shape)
+    model.add(MobileNetV2(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg", input_shape=shape))
     model.add(Dense(NB_CLASSES, activation='softmax'))
     return model
 
@@ -91,4 +115,6 @@ def get_model(model):
         return return_mobilenet()
     if (model == "svc"):
         return return_svc()
+    if (model == "mobilenetV2"):
+        return return_mobilenetV2()
     return None
