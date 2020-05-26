@@ -17,8 +17,6 @@ def return_svc():
 def build_hybrid_model(base_model):
     model = Sequential()
     model.add(base_model)
-    model.add(Dense(1024, activation='relu'))
-    model.add(Dense(1024, activation='relu'))
     model.add(Dense(512, activation='relu'))
     model.add(Dense(NB_CLASSES, activation='softmax'))
     return model
@@ -34,6 +32,7 @@ def return_frozen_mobilenetV2():
     new_input = Input(shape=shape)
     base_model = MobileNet(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg", input_shape=shape)
     base_model.trainable = False
+    print(base_model.summary())
     return base_model
 
 def return_mobilenet():
