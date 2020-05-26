@@ -55,9 +55,9 @@ def evaluate_model(model, x_test, y_test):
     return score
 
 
-def get_optimizer(optimizer_type):
+def get_optimizer(optimizer_type, lr=0.00005):
     if (optimizer_type == "rmsprop"):
-        return RMSprop(lr=0.00005)
+        return RMSprop(lr=lr)
     return None
 
 
@@ -110,8 +110,9 @@ def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
     base_model = return_frozen_mobilenetV2()
     model = build_hybrid_model(base_model)
     callbacks = create_callbacks_list()
-    optimizer = get_optimizer(optimizer_type)
+    optimizer = get_optimizer(optimizer_type, 0.0005)
     compile_model(model, optimizer)
+    print(model.summary())
     history = fit(model, train_generator, val_generator, callbacks, epoch)
     model = load_model(filepath)
     if (evaluate):
