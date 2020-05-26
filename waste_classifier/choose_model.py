@@ -1,6 +1,7 @@
 from sklearn.svm import SVC
 from tensorflow.python.keras import Input
 from tensorflow.python.keras.applications.mobilenet import MobileNet
+from tensorflow.python.keras.applications.mobilenet_v2 import MobileNetV2
 from tensorflow.python.keras.applications.resnet import ResNet50
 from tensorflow.python.keras.applications.vgg16 import VGG16
 from tensorflow.python.keras.layers import Dense, Conv2D, MaxPooling2D, BatchNormalization, Dropout, Flatten
@@ -21,8 +22,9 @@ def bootleneck_feature_extractor():
 
 def return_mobilenet():
     model = Sequential()
-    new_input = Input(shape=(HEIGHT, WIDTH, 3))
-    model.add(MobileNet(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg"))
+    shape = (HEIGHT, WIDTH, 3)
+    new_input = Input(shape=shape)
+    model.add(MobileNetV2(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg", input_shape=shape))
     model.add(Dense(NB_CLASSES, activation='softmax'))
     return model
 
