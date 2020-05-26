@@ -124,6 +124,7 @@ def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
     optimizer = get_optimizer(optimizer_type)
     compile_model(model, optimizer)
     history = fit(model, train_generator, val_generator, callbacks, 70)
+    model = load_model(filepath)
 
     if (evaluate):
         score = evaluate_model(model, x_test, y_test)
