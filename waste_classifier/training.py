@@ -116,9 +116,9 @@ def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
     base_model = model.layers[0]
     base_model.trainable = True
 
-    fine_tune_at = 20
-    for layer in base_model.layers[:fine_tune_at]:
-        layer.trainable = False
+    #fine_tune_at = 20
+    #for layer in base_model.layers[:fine_tune_at]:
+    #    layer.trainable = False
 
     optimizer = get_optimizer(optimizer_type, 0.00005)
     compile_model(model, optimizer)
