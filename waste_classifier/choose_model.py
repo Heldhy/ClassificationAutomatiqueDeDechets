@@ -17,7 +17,7 @@ def return_svc():
 def build_hybrid_model(base_model):
     model = Sequential()
     model.add(base_model)
-    model.add(Dense(256, activation='relu'))
+    #model.add(Dense(256, activation='relu'))
     model.add(Dense(NB_CLASSES, activation='softmax'))
     return model
 
