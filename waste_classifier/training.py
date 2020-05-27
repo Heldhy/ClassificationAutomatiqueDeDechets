@@ -113,6 +113,7 @@ def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
     history = fit(model, train_generator, val_generator, callbacks, 20)
 
     model = load_model(filepath)
+    base_model = model.layers[0]
     base_model.trainable = True
     print("---")
     print("Number of layers in the base model: ", len(base_model.layers))
