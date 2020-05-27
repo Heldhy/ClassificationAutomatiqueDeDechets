@@ -121,9 +121,9 @@ def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
         layer.trainable = False
 
     optimizer = get_optimizer(optimizer_type)
-    compile_model(model, optimizer)
+    compile_model(model, optimizer, 0.00001)
     history = fit(model, train_generator, val_generator, callbacks, 70)
-    model = load_model(filepath, 0.00001)
+    model = load_model(filepath)
 
     if (evaluate):
         score = evaluate_model(model, x_test, y_test)
