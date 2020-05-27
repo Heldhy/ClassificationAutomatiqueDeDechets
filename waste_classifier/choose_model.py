@@ -27,10 +27,10 @@ def bootleneck_feature_extractor():
     vgg = VGG16(include_top=False, input_tensor=new_input)
     return vgg
 
-def return_frozen_mobilenetV2():
+def return_frozen_mobilenet():
     shape = (HEIGHT, WIDTH, 3)
     new_input = Input(shape=shape)
-    base_model = MobileNetV2(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg", input_shape=shape)
+    base_model = MobileNet(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg", input_shape=shape)
     base_model.trainable = False
     print(base_model.summary())
     return base_model

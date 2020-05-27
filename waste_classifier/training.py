@@ -1,16 +1,13 @@
 import tensorflow as tf
-from keras_preprocessing.image import ImageDataGenerator
-from numpy import concatenate, argmax, save, load
+from numpy import argmax, save, load
 from sklearn.metrics import recall_score, accuracy_score
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import RMSprop
-from tensorflow.python.keras.applications import vgg16
-from tensorflow.python.keras.utils.np_utils import to_categorical
 
 from waste_classifier import filepath, optimizer_type, model_type, epoch, batch_size, get_model, \
     bootleneck_feature_extractor, create_only_one_generator_for_feature_extraction, no_pre_processing, NB_CLASSES, \
-    return_frozen_mobilenetV2, build_hybrid_model
+    build_hybrid_model, return_frozen_mobilenet
 
 
 def extract_train_features(x_train, y_train):
@@ -107,7 +104,7 @@ def training_extractor(x_train, y_train, x_test, y_test, chosen_model=None, eval
 
 
 def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
-    base_model = return_frozen_mobilenetV2()
+    base_model = return_frozen_mobilenet()
     model = build_hybrid_model(base_model)
     callbacks = create_callbacks_list()
     optimizer = get_optimizer(optimizer_type, 0.0005)
@@ -120,7 +117,7 @@ def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
     print("---")
     print("Number of layers in the base model: ", len(base_model.layers))
     print("---")
-    fine_tune_at = 80
+    fine_tune_at = 20
     for layer in base_model.layers[:fine_tune_at]:
         layer.trainable = False
     optimizer = get_optimizer(optimizer_type)
