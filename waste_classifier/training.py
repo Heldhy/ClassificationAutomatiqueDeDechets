@@ -110,22 +110,20 @@ def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
     optimizer = get_optimizer(optimizer_type, 0.0005)
     compile_model(model, optimizer)
     print(model.summary())
-    history = fit(model, train_generator, val_generator, callbacks, 20)
+    fit(model, train_generator, val_generator, callbacks, 20)
 
     model = load_model(filepath)
     base_model = model.layers[0]
     base_model.trainable = True
-    print("---")
-    print("Number of layers in the base model: ", len(base_model.layers))
-    print("---")
+
     fine_tune_at = 20
     for layer in base_model.layers[:fine_tune_at]:
         layer.trainable = False
-    print(model.summary())
+
     optimizer = get_optimizer(optimizer_type)
     compile_model(model, optimizer)
     history = fit(model, train_generator, val_generator, callbacks, 70)
-    model = load_model(filepath)
+    model = load_model(filepath, 0.00001)
 
     if (evaluate):
         score = evaluate_model(model, x_test, y_test)
