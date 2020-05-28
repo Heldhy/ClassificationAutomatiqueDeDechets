@@ -120,7 +120,7 @@ def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
     #for layer in base_model.layers[:fine_tune_at]:
     #    layer.trainable = False
 
-    optimizer = get_optimizer(optimizer_type, 0.00003)
+    optimizer = get_optimizer(optimizer_type, 0.00005)
     compile_model(model, optimizer)
     history = fit(model, train_generator, val_generator, callbacks, 100)
     model = load_model(filepath)
