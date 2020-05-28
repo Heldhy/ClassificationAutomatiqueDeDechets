@@ -110,7 +110,7 @@ def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
     optimizer = get_optimizer(optimizer_type, 0.0005)
     compile_model(model, optimizer)
     print(model.summary())
-    fit(model, train_generator, val_generator, callbacks, 20)
+    fit(model, train_generator, val_generator, callbacks, 25)
 
     model = load_model(filepath)
     base_model = model.layers[0]
@@ -122,7 +122,7 @@ def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
 
     optimizer = get_optimizer(optimizer_type, 0.00005)
     compile_model(model, optimizer)
-    history = fit(model, train_generator, val_generator, callbacks, 80)
+    history = fit(model, train_generator, val_generator, callbacks, 100)
     model = load_model(filepath)
 
     if (evaluate):
