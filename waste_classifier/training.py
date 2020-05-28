@@ -107,7 +107,7 @@ def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
     base_model = return_frozen_mobilenet()
     model = build_hybrid_model(base_model)
     callbacks = create_callbacks_list()
-    optimizer = get_optimizer(optimizer_type, 0.0005)
+    optimizer = get_optimizer(optimizer_type, 0.0007)
     compile_model(model, optimizer)
     print(model.summary())
     fit(model, train_generator, val_generator, callbacks, 25)
