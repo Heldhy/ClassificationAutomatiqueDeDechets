@@ -1,11 +1,11 @@
-from waste_classifier import pre_processing, training_extractor
+from waste_classifier import pre_processing, create_new_generator, fine_tuning
 
 
 def main():
     x_train, y_train, x_test, y_test = pre_processing(type_of_model="mobilenet")
-    #train_generator, val_generator = create_new_generator(x_train, y_train, "mobilenet")
-    model = training_extractor(x_train, y_train, x_test, y_test, chosen_model="svc", evaluate=True)
-    #model, history = fine_tuning(train_generator, val_generator, x_test, y_test, True)
+    train_generator, val_generator = create_new_generator(x_train, y_train, "mobilenet")
+    #model = training_extractor(x_train, y_train, x_test, y_test, chosen_model="svc", evaluate=True)
+    model, history = fine_tuning(train_generator, val_generator, x_test, y_test, True)
     #evaluate_post_processed_prediction(model, x_test, y_test)
 
 
