@@ -1,3 +1,4 @@
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from tensorflow.python.keras import Input
 from tensorflow.python.keras.applications.mobilenet import MobileNet
@@ -13,26 +14,28 @@ from waste_classifier import NB_CLASSES, HEIGHT, WIDTH
 def return_svc():
     return SVC()
 
+def return_random_forest():
+    return RandomForestClassifier(1000)
 
 def build_hybrid_model(base_model):
     model = Sequential()
     model.add(base_model)
-    #model.add(Dense(256, activation='relu'))
     model.add(Dense(NB_CLASSES, activation='softmax'))
     return model
-
-
-def bootleneck_feature_extractor():
-    new_input = Input(shape=(224, 224, 3))
-    vgg = VGG16(include_top=False, input_tensor=new_input)
-    return vgg
 
 def return_frozen_mobilenet():
     shape = (HEIGHT, WIDTH, 3)
     new_input = Input(shape=shape)
     base_model = MobileNet(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg", input_shape=shape)
     base_model.trainable = False
-    print(base_model.summary())
+    return base_model
+
+
+def bootleneck_feature_extractor():
+    shape = (HEIGHT, WIDTH, 3)
+    new_input = Input(shape=shape)
+    base_model = MobileNet(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg",
+                           input_shape=shape)
     return base_model
 
 def return_mobilenet():
@@ -116,4 +119,6 @@ def get_model(model):
         return return_svc()
     if (model == "mobilenetV2"):
         return return_mobilenetV2()
+    if (model == "random_forest"):
+        return return_random_forest()
     return None

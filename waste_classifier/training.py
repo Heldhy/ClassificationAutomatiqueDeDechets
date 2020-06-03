@@ -6,14 +6,14 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import RMSprop
 
 from waste_classifier import filepath, optimizer_type, model_type, epoch, batch_size, get_model, \
-    bootleneck_feature_extractor, create_only_one_generator_for_feature_extraction, no_pre_processing, NB_CLASSES, \
-    build_hybrid_model, return_frozen_mobilenet
+    bootleneck_feature_extractor, create_only_one_generator_for_feature_extraction, build_hybrid_model, \
+    return_frozen_mobilenet
 
 
 def extract_train_features(x_train, y_train):
     extractor = bootleneck_feature_extractor()
     data_generator = create_only_one_generator_for_feature_extraction(x_train, y_train)
-    features = extractor.predict_generator(data_generator, len(x_train) // batch_size)
+    features = extractor.predict(data_generator, len(x_train) // batch_size)
     return features, data_generator
 
 
@@ -88,8 +88,12 @@ def training_extractor(x_train, y_train, x_test, y_test, chosen_model=None, eval
     nb_train_sample = len(features)
     y_train = data_generator.y[:nb_train_sample]
     y_train = argmax(y_train, axis = 1)
-    features_reshaped = features.reshape((nb_train_sample, -1))
-    model.fit(features_reshaped, y_train)
+    model.fit(features, y_train)
+    y_pred = model.predict(features)
+    recall = recall_score(y_train, y_pred, average='macro')
+    accuracy = accuracy_score(y_train, y_pred)
+    print("accuracy : " + str(accuracy))
+    print("recall : " + str(recall))
     if(evaluate):
         test_features = extract_test_features(x_test)
         if(saving):
@@ -109,16 +113,11 @@ def fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
     callbacks = create_callbacks_list()
     optimizer = get_optimizer(optimizer_type, 0.0005)
     compile_model(model, optimizer)
-    print(model.summary())
     fit(model, train_generator, val_generator, callbacks, 25)
 
     model = load_model(filepath)
     base_model = model.layers[0]
     base_model.trainable = True
-
-    #fine_tune_at = 20
-    #for layer in base_model.layers[:fine_tune_at]:
-    #    layer.trainable = False
 
     optimizer = get_optimizer(optimizer_type, 0.00005)
     compile_model(model, optimizer)
