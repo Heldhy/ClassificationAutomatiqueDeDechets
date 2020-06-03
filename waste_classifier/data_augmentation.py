@@ -25,11 +25,11 @@ def create_new_generator(x_train, y_train, type_of_model=None):
                                  validation_split=0.2,
                                  width_shift_range=0.2,
                                  height_shift_range=0.2,
-                                 shear_range=0.4,
-                                 zoom_range=(0.9, 1.1),
+                                 shear_range=0.5,
+                                 zoom_range=0.2,
                                  horizontal_flip=True,
                                  brightness_range=(0.8, 1.2),
-                                 channel_shift_range=0.9,
+                                 #channel_shift_range=0.9,
                                  vertical_flip=True,
                                  preprocessing_function=return_preprocessing_function(type_of_model))
     datagen.fit(x_train)
