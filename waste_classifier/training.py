@@ -3,7 +3,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import RMSprop
 
-from waste_classifier import filepath, batch_size, add_classification_layer, return_frozen_mobilenet
+from waste_classifier import filepath, batch_size, return_frozen_mobilenet, add_classification_layer
 
 
 def create_callbacks_list():
