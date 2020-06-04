@@ -3,19 +3,10 @@ from pathlib import Path
 import numpy as np
 from cv2.cv2 import INTER_AREA, resize
 from matplotlib.pyplot import imread
-from tensorflow.keras.applications import resnet50
 from tensorflow.keras.utils import to_categorical
-from tensorflow.python.keras.applications import mobilenet, vgg16
+from tensorflow.python.keras.applications.mobilenet import preprocess_input
 
-from waste_classifier import CLASS_TO_INDEX, BASE_DIR, model_type
-
-
-def return_preprocessing_function(type_of_model):
-    if(type_of_model == "mobilenet"):
-        return mobilenet.preprocess_input
-    if(type_of_model == "vgg16"):
-        return vgg16.preprocess_input
-    return resnet50.preprocess_input
+from waste_classifier import CLASS_TO_INDEX, BASE_DIR
 
 
 def no_pre_processing(data):
@@ -46,20 +37,18 @@ def get_preprocessed_data(path, pre_processing_function):
     return np.array(x_data), np.array(y_data)
 
 
-def get_data(directory, type_of_model):
+def get_data(directory):
     train_folder = directory/ 'train'
     test_folder = directory / 'test'
     x_train, y_train = get_preprocessed_data(train_folder, no_pre_processing)
-    x_test, y_test = get_preprocessed_data(test_folder, return_preprocessing_function(type_of_model))
+    x_test, y_test = get_preprocessed_data(test_folder, preprocess_input)
     return x_train, y_train, x_test, y_test
 
 
-def pre_processing(directory=None, type_of_model=None):
+def pre_processing(directory=None):
     if(directory is None):
         directory = BASE_DIR
-    if (type_of_model is None):
-        type_of_model = model_type
-    x_train, y_train, x_test, y_test = get_data(directory, type_of_model)
+    x_train, y_train, x_test, y_test = get_data(directory)
     y_train = to_categorical(y_train)
     y_test = to_categorical(y_test)
     idx = np.random.permutation(len(y_train))

@@ -9,15 +9,6 @@ BASE_DIR = Path('.') / 'data' / "dataset-resized"
 WIDTH = 224
 HEIGHT = 224
 batch_size = 64
-epoch = 60
 filepath = "bestmodel.h5"
-model_type = "mobilenet"
-optimizer_type = "rmsprop"
 
 
-from .pre_processing import *
-from .choose_model import *
-from .data_augmentation import *
-from .training import *
-from .post_processing import *
-from .use_model import *
