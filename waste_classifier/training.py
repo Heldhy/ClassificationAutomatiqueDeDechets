@@ -1,4 +1,8 @@
+from pathlib import Path
+
 import tensorflow as tf
+from matplotlib.pyplot import subplots, savefig
+from numpy.ma import arange
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import RMSprop
@@ -39,13 +43,50 @@ def get_optimizer(lr=0.00005):
     return RMSprop(lr=lr)
 
 
+def training_visualisation(history, nb_epoch, title, path="learning_curves"):
+    nb_epoch += 1
+    p = Path(path)
+    if (not p.exists()):
+        p.mkdir(parents=True)
+    f, (ax1, ax2, ax3) = subplots(1, 3, figsize=(20, 6))
+    t = f.suptitle('MobileNet Performances', fontsize=12)
+    f.subplots_adjust(top=0.85, wspace=0.3)
+
+    epoch_list = list(range(1, nb_epoch))
+    ax1.plot(epoch_list, history.history['accuracy'], label='Train Accuracy')
+    ax1.plot(epoch_list, history.history['val_accuracy'], label='Validation Accuracy')
+    ax1.set_xticks(arange(0, nb_epoch, 5))
+    ax1.set_ylabel('Accuracy Value')
+    ax1.set_xlabel('Epoch')
+    ax1.set_title('Accuracy')
+    l1 = ax1.legend(loc="best")
+
+    ax2.plot(epoch_list, history.history['recall'], label='Train Recall')
+    ax2.plot(epoch_list, history.history['val_recall'], label='Validation Recall')
+    ax2.set_xticks(arange(0, nb_epoch, 5))
+    ax2.set_ylabel('Recall Value')
+    ax2.set_xlabel('Epoch')
+    ax2.set_title('Recall')
+    l2 = ax2.legend(loc="best")
+
+    ax3.plot(epoch_list, history.history['loss'], label='Train Loss')
+    ax3.plot(epoch_list, history.history['val_loss'], label='Validation Loss')
+    ax3.set_xticks(arange(0, nb_epoch, 5))
+    ax3.set_ylabel('Loss Value')
+    ax3.set_xlabel('Epoch')
+    ax3.set_title('Loss')
+    l3 = ax3.legend(loc="best")
+    savefig(p / title)
+
+
 def training_with_fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
     base_model = return_frozen_mobilenet()
     model = add_classification_layer(base_model)
     callbacks = create_callbacks_list()
     optimizer = get_optimizer(0.0005)
     compile_model(model, optimizer)
-    fit(model, train_generator, val_generator, callbacks, 25)
+    history = fit(model, train_generator, val_generator, callbacks, 25)
+    training_visualisation(history, 25, "training")
 
     model = load_model(filepath)
     base_model = model.layers[0]
@@ -54,6 +95,7 @@ def training_with_fine_tuning(train_generator, val_generator, x_test, y_test, ev
     optimizer = get_optimizer(0.00005)
     compile_model(model, optimizer)
     history = fit(model, train_generator, val_generator, callbacks, 100)
+    training_visualisation(history, 100, "fine_tuning")
     model = load_model(filepath)
 
     if (evaluate):
