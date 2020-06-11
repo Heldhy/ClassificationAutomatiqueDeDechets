@@ -26,18 +26,16 @@ def create_new_generator(x_train, y_train):
 
 
 def save_generated_batch(generator, batch_number, path="batch_images"):
-    current_batch = 0
     path_to_save_at = Path(path)
     if not path_to_save_at.exists():
         path_to_save_at.mkdir(parents=True)
-    for X_batch, y_batch in generator:
-        if (current_batch == batch_number):
+    for current_batch, (X_batch, y_batch) in enumerate(generator):
+        if current_batch == batch_number:
             figure_plot = figure(figsize=(20, 20))
-            for current_batch in range(0, batch_size):
-                fig = figure_plot.add_subplot(batch_size // 8, 8, current_batch + 1)
-                fig.set_title(CLASSES[argmax(y_batch[current_batch])])
+            for current_image in range(batch_size):
+                fig = figure_plot.add_subplot(batch_size // 8, 8, current_image + 1)
+                fig.set_title(CLASSES[argmax(y_batch[current_image])])
                 tight_layout()
-                imshow(X_batch[current_batch].reshape(HEIGHT, WIDTH, 3))
+                imshow(X_batch[current_image].reshape(HEIGHT, WIDTH, 3))
             savefig((path_to_save_at / ("batch" + str(batch_number))))
             return
-        current_batch += 1
