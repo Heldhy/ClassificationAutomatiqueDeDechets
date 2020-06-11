@@ -16,9 +16,9 @@ def return_trash_label(previous_label):
 def predict_image(model, path):
     source_img = imread(path)
     img = preprocess_input(make_square(source_img))
-    pred = model.predict(img.reshape((1, HEIGHT, WIDTH, 3)))
-    prediction_list = pred.tolist()[0]
-    max_index = np.argmax(pred)
+    prediction = model.predict(img.reshape((1, HEIGHT, WIDTH, 3)))
+    prediction_list = prediction.tolist()[0]
+    max_index = np.argmax(prediction)
     second_max_index = prediction_list.index(max(prediction_list[:max_index] + prediction_list[max_index + 1:]))
     trash = return_trash_label(max_index)
     print(CLASSES[max_index] + ": " + str(max(prediction_list) * 100)[:5] + "%")

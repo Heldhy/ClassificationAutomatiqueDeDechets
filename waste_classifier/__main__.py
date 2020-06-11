@@ -1,5 +1,5 @@
 from waste_classifier import pre_processing, create_new_generator, training_with_fine_tuning, \
-    evaluate_post_processed_prediction
+    evaluate_post_processed_prediction, filepath
 
 
 def main():
@@ -7,6 +7,7 @@ def main():
     train_generator, val_generator = create_new_generator(x_train, y_train)
     model, history = training_with_fine_tuning(train_generator, val_generator, x_test, y_test)
     evaluate_post_processed_prediction(model, x_test, y_test)
+    model.save(filepath)
 
 
 if __name__ == "__main__":

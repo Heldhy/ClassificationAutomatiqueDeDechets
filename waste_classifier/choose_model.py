@@ -16,7 +16,7 @@ def add_classification_layer(base_model):
 def return_frozen_mobilenet():
     shape = (HEIGHT, WIDTH, 3)
     new_input = Input(shape=shape)
-    base_model = MobileNet(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg", input_shape=shape)
+    base_model = MobileNet(include_top=False, weights='imagenet', input_tensor=new_input, pooling="avg",
+                           input_shape=shape)
     base_model.trainable = False
     return base_model
-

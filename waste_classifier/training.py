@@ -45,12 +45,12 @@ def get_optimizer(lr=0.00005):
 
 def training_visualisation(history, nb_epoch, title, path="learning_curves"):
     nb_epoch += 1
-    p = Path(path)
-    if (not p.exists()):
-        p.mkdir(parents=True)
-    f, (ax1, ax2, ax3) = subplots(1, 3, figsize=(20, 6))
-    t = f.suptitle('MobileNet Performances', fontsize=12)
-    f.subplots_adjust(top=0.85, wspace=0.3)
+    path_to_save_at = Path(path)
+    if (not path_to_save_at.exists()):
+        path_to_save_at.mkdir(parents=True)
+    figure_plot, (ax1, ax2, ax3) = subplots(1, 3, figsize=(20, 6))
+    figure_plot.suptitle('MobileNet Performances', fontsize=12)
+    figure_plot.subplots_adjust(top=0.85, wspace=0.3)
 
     epoch_list = list(range(1, nb_epoch))
     ax1.plot(epoch_list, history.history['accuracy'], label='Train Accuracy')
@@ -59,7 +59,7 @@ def training_visualisation(history, nb_epoch, title, path="learning_curves"):
     ax1.set_ylabel('Accuracy Value')
     ax1.set_xlabel('Epoch')
     ax1.set_title('Accuracy')
-    l1 = ax1.legend(loc="best")
+    ax1.legend(loc="best")
 
     ax2.plot(epoch_list, history.history['recall'], label='Train Recall')
     ax2.plot(epoch_list, history.history['val_recall'], label='Validation Recall')
@@ -67,7 +67,7 @@ def training_visualisation(history, nb_epoch, title, path="learning_curves"):
     ax2.set_ylabel('Recall Value')
     ax2.set_xlabel('Epoch')
     ax2.set_title('Recall')
-    l2 = ax2.legend(loc="best")
+    ax2.legend(loc="best")
 
     ax3.plot(epoch_list, history.history['loss'], label='Train Loss')
     ax3.plot(epoch_list, history.history['val_loss'], label='Validation Loss')
@@ -75,8 +75,8 @@ def training_visualisation(history, nb_epoch, title, path="learning_curves"):
     ax3.set_ylabel('Loss Value')
     ax3.set_xlabel('Epoch')
     ax3.set_title('Loss')
-    l3 = ax3.legend(loc="best")
-    savefig(p / title)
+    ax3.legend(loc="best")
+    savefig(path_to_save_at / title)
 
 
 def training_with_fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):

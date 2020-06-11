@@ -26,19 +26,19 @@ def make_square(img, min_size=224):
 def get_preprocessed_data(path, pre_processing_function):
     x_data = []
     y_data = []
-    p = Path(path)
-    files = sorted(p.iterdir())
-    for i in files:
-        for j in sorted(i.iterdir()):
-            img = imread(j)
+    path_to_data = Path(path)
+    files = sorted(path_to_data.iterdir())
+    for directories in files:
+        for images in sorted(directories.iterdir()):
+            img = imread(images)
             img = make_square(img)
             x_data.append(pre_processing_function(img))
-            y_data.append(CLASS_TO_INDEX[i.name])
+            y_data.append(CLASS_TO_INDEX[directories.name])
     return np.array(x_data), np.array(y_data)
 
 
 def get_data(directory):
-    train_folder = directory/ 'train'
+    train_folder = directory / 'train'
     test_folder = directory / 'test'
     x_train, y_train = get_preprocessed_data(train_folder, no_pre_processing)
     x_test, y_test = get_preprocessed_data(test_folder, preprocess_input)
@@ -46,11 +46,11 @@ def get_data(directory):
 
 
 def pre_processing(directory=None):
-    if(directory is None):
+    if directory is None:
         directory = BASE_DIR
     x_train, y_train, x_test, y_test = get_data(directory)
     y_train = to_categorical(y_train)
     y_test = to_categorical(y_test)
-    idx = np.random.permutation(len(y_train))
-    x_train, y_train = x_train[idx], y_train[idx]
+    random_permutation_to_apply = np.random.permutation(len(y_train))
+    x_train, y_train = x_train[random_permutation_to_apply], y_train[random_permutation_to_apply]
     return x_train, y_train, x_test, y_test
