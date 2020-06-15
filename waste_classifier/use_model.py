@@ -1,8 +1,9 @@
 import numpy as np
 from matplotlib.pyplot import imread
 from tensorflow.python.keras.applications.mobilenet import preprocess_input
+from tensorflow.python.ops.nn_ops import softmax
 
-from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE, make_image_square
+from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE, make_image_square, get_logits_friendly_model
 
 
 def return_trash_label(previous_label):
@@ -13,10 +14,13 @@ def return_trash_label(previous_label):
     return 2
 
 
-def predict_image(model, path):
+def predict_image(model, path, temperature_scaling=1):
     source_img = imread(path)
     img = preprocess_input(make_image_square(source_img))
-    prediction = model.predict(img.reshape((1, HEIGHT, WIDTH, 3)))
+    logit_model = get_logits_friendly_model(model)
+    logits = logit_model.predict(img.reshape((1, HEIGHT, WIDTH, 3)))
+    calibrated_logits = logits / temperature_scaling
+    prediction = softmax(calibrated_logits)
     prediction_list = prediction.tolist()[0]
     max_index = np.argmax(prediction)
     second_max_index = prediction_list.index(max(prediction_list[:max_index] + prediction_list[max_index + 1:]))
