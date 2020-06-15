@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib.pyplot import imread
 from tensorflow.python.keras.applications.mobilenet import preprocess_input
 
-from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE, make_square
+from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE, make_image_square
 
 
 def return_trash_label(previous_label):
@@ -15,7 +15,7 @@ def return_trash_label(previous_label):
 
 def predict_image(model, path):
     source_img = imread(path)
-    img = preprocess_input(make_square(source_img))
+    img = preprocess_input(make_image_square(source_img))
     prediction = model.predict(img.reshape((1, HEIGHT, WIDTH, 3)))
     prediction_list = prediction.tolist()[0]
     max_index = np.argmax(prediction)

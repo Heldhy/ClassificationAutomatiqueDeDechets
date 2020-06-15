@@ -13,7 +13,7 @@ def no_pre_processing(data):
     return data
 
 
-def make_square(img, min_size=224):
+def make_image_square(img, min_size=224):
     height = img.shape[0]
     width = img.shape[1]
     largest_dimension = max(img.shape)
@@ -31,7 +31,7 @@ def get_preprocessed_data(path, pre_processing_function):
     for directories in files:
         for images in sorted(directories.iterdir()):
             img = imread(images)
-            img = make_square(img)
+            img = make_image_square(img)
             x_data.append(pre_processing_function(img))
             y_data.append(CLASS_TO_INDEX[directories.name])
     return np.array(x_data), np.array(y_data)

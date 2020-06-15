@@ -91,7 +91,6 @@ def training_with_fine_tuning(train_generator, val_generator, x_test, y_test, ev
     model = load_model(filepath)
     base_model = model.layers[0]
     base_model.trainable = True
-
     optimizer = get_optimizer(0.00005)
     compile_model(model, optimizer)
     history = fit(model, train_generator, val_generator, callbacks, 100)

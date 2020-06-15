@@ -1,68 +1,68 @@
-from waste_classifier import make_square
+from waste_classifier import make_image_square
 import numpy as np
 
 
-def test_make_square_of_a_squared_picture():
+def test_make_image_square_of_a_squared_picture():
     # Given
     randnum = np.random.randint(0, 255, 7500)
     img = randnum.reshape((50, 50, 3))
 
     # When
-    squared = make_square(img)
+    squared = make_image_square(img)
 
     # Then
     assert squared.shape == (224, 224, 3)
 
 
-def test_make_square_does_not_change_squared_picture_if_the_size_is_already_the_targeted_one():
+def test_make_image_square_does_not_change_squared_picture_if_the_size_is_already_the_targeted_one():
     # Given
     randnum = np.random.randint(0, 255, 7500)
     img = randnum.reshape((50, 50, 3))
 
     # When
-    squared = make_square(img, 50)
+    squared = make_image_square(img, 50)
 
     # Then
     assert np.array_equal(squared, img)
 
 
-def test_make_square_of_a_rectangle_image():
+def test_make_image_square_of_a_rectangle_image():
     # Given
     randnum = np.random.randint(0, 255, 7200)
     img = randnum.reshape((60, 40, 3))
 
     # When
-    squared = make_square(img)
+    squared = make_image_square(img)
 
     # Then
     assert squared.shape == (224, 224, 3)
 
 
-def test_make_square_not_only_one_color_for_a_rectangle():
+def test_make_image_square_not_only_one_color_for_a_rectangle():
     # Given
     randnum = np.random.randint(0, 255, 7200)
     img = randnum.reshape((60, 40, 3))
 
     # When
-    squared = make_square(img)
+    squared = make_image_square(img)
 
     # Then
     assert not np.array_equal(np.mean(squared, axis=0), squared[112, 112])
 
 
-def test_make_square_not_only_one_color_for_a_square():
+def test_make_image_square_not_only_one_color_for_a_square():
     # Given
     randnum = np.random.randint(0, 255, 7500)
     img = randnum.reshape((50, 50, 3))
 
     # When
-    squared = make_square(img)
+    squared = make_image_square(img)
 
     # Then
     assert not np.array_equal(np.mean(squared, axis=0), squared[112, 112])
 
 
-def test_make_square_two_different_pictures_are_different():
+def test_make_image_square_two_different_pictures_are_different():
     # Given
     first_array = np.random.randint(0, 255, 7500)
     first_img = first_array.reshape((50, 50, 3))
@@ -70,8 +70,8 @@ def test_make_square_two_different_pictures_are_different():
     second_img = second_array.reshape((50, 50, 3))
 
     # When
-    first_img = make_square(first_img)
-    second_img = make_square(second_img)
+    first_img = make_image_square(first_img)
+    second_img = make_image_square(second_img)
 
     # Then
     assert not np.array_equal(first_img, second_img)
