@@ -2,7 +2,7 @@ from tensorflow.python.keras.models import load_model
 
 from calibration import calibrate_on_test
 from waste_classifier import pre_processing, create_new_generator, training_with_fine_tuning, \
-    evaluate_post_processed_prediction, filepath, soft_recall_from_model, AN_TABLE, CLASSES, calibrate_model, \
+    evaluate_post_processed_prediction, filepath, soft_recall_from_model, AN_TABLE, CLASSES, calibrate_on_validation, \
     get_logits_friendly_model, filepath_logit, reliability_diagram
 
 
@@ -15,8 +15,8 @@ def main():
     logit_model = get_logits_friendly_model(model)
     logit_model.save(filepath_logit)
 
-    temp = calibrate_model(filepath, val_generator)
-    second_temp = calibrate_on_test(filepath, x_test, y_test, temp)
+    temp = calibrate_on_validation(filepath, val_generator)
+    second_temp = calibrate_on_test(filepath, x_test, y_test)
 
 
 if __name__ == "__main__":

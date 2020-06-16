@@ -7,7 +7,7 @@ from tensorflow.python import convert_to_tensor, float32, int32, Variable, reduc
 from tensorflow.python.keras.applications.mobilenet import preprocess_input
 from tensorflow.python.keras.models import load_model
 from tensorflow.python.keras.optimizer_v2.adam import Adam
-from tensorflow.python.ops.nn_ops import softmax, softmax_cross_entropy_with_logits
+from tensorflow.python.ops.nn_ops import softmax, softmax_cross_entropy_with_logits_v2
 from tensorflow_probability.python.stats import expected_calibration_error
 
 from waste_classifier import NB_CLASSES, CLASSES, compile_model
@@ -31,18 +31,13 @@ def reliability_diagram(prediction, y, name, path='reliability_diagram'):
     for considerate_class in range(NB_CLASSES):
         probs = prediction[:, considerate_class]
         y_one_vs_all = from_multiclass_to_one_vs_all(y, considerate_class)
-        fop, mpv = calibration_curve(y_one_vs_all, probs, n_bins=15)
+        fop, mpv = calibration_curve(y_one_vs_all, probs, n_bins=10)
         fig = figure_plot.add_subplot(NB_CLASSES // 2, 2, considerate_class + 1)
         fig.set_title(CLASSES[considerate_class])
         tight_layout()
         plot([0, 1], [0, 1], linestyle='--')
         plot(mpv, fop, marker='.')
         savefig(path_to_save_at / name)
-
-
-def reliability_diagram_from_model(prediction_model, x, y, name, path='reliability_diagram'):
-    prediction = prediction_model.predict(x)
-    reliability_diagram(prediction, y, name, path)
 
 
 def get_logits_friendly_model(model):
@@ -68,56 +63,41 @@ def compute_temperature_scaling(logit_model, x, y):
     def compute_loss():
         divided_prediction = divide(logits, temp)
         loss = reduce_mean(
-            softmax_cross_entropy_with_logits(labels=convert_to_tensor(y), logits=divided_prediction))
+            softmax_cross_entropy_with_logits_v2(labels=convert_to_tensor(y), logits=divided_prediction))
         return loss
 
-    optimizer = Adam(learning_rate=0.001)
-    for i in range(500):
+    optimizer = Adam(learning_rate=0.01)
+    for i in range(1000):
         optimizer.minimize(compute_loss, var_list=[temp])
     return temp.numpy()
 
 
-def calibrate_model(model_path, val_generator):
-    logit_model = get_logits_friendly_model(load_model(model_path))
-    prediction_model = load_model(model_path)
+def calibrate(logit_model, x, y):
+    uncalibrated_logits = logit_model.predict(x)
+    uncalibrated_prediction = softmax(uncalibrated_logits)
 
-    x_val = val_generator.x
-    y_val = val_generator.y
-    x_val_pre = preprocess_input(x_val)
+    print("ECE before calibration: " + str(compute_ECE(logit_model, x, y, 20, 1)))
+    reliability_diagram(uncalibrated_prediction, y, "before_calibration")
 
-    print("ECE before calibration: " + str(compute_ECE(logit_model, x_val_pre, y_val, 50, 1)))
-    reliability_diagram_from_model(prediction_model, x_val_pre, y_val, "before_calibration")
+    temperature_scaling = compute_temperature_scaling(logit_model, x, y)
 
-    temperature_scaling = compute_temperature_scaling(logit_model, x_val_pre, y_val)
-
-    prediction = logit_model.predict(x_val_pre)
-    calibrated_logits = prediction / temperature_scaling
+    calibrated_logits = uncalibrated_logits / temperature_scaling
     calibrated_prediction = softmax(calibrated_logits)
 
     print("scaling by " + str(temperature_scaling))
-    print("ECE after calibration: " + str(compute_ECE(logit_model, x_val_pre, y_val, 50, temperature_scaling)))
-    reliability_diagram(calibrated_prediction, y_val, "after_calibration")
-
+    print("ECE after calibration: " + str(compute_ECE(logit_model, x, y, 20, temperature_scaling)))
+    reliability_diagram(calibrated_prediction, y, "after_calibration")
     return temperature_scaling
 
 
-def calibrate_on_test(model_path, x_test, y_test, first_temperature=1):
+def calibrate_on_validation(model_path, val_generator):
     logit_model = get_logits_friendly_model(load_model(model_path))
-    uncalibrated_logits = logit_model.predict(x_test) / first_temperature
-    uncalibrated_prediction = softmax(uncalibrated_logits)
+    x_val = val_generator.x
+    y_val = val_generator.y
+    x_val_pre = preprocess_input(x_val)
+    return calibrate(logit_model, x_val_pre, y_val)
 
-    print("ECE before calibration: " + str(compute_ECE(logit_model, x_test, y_test, 50, first_temperature)))
-    reliability_diagram(uncalibrated_prediction, y_test, "before_second_calibration")
 
-    temperature_scaling = compute_temperature_scaling(logit_model, x_test, y_test)
-
-    prediction = logit_model.predict(x_test)
-    calibrated_logits = prediction / (first_temperature * temperature_scaling)
-    calibrated_prediction = softmax(calibrated_logits)
-
-    print("scaling by " + str(temperature_scaling))
-    print("ECE after calibration: " + str(
-        compute_ECE(logit_model, x_test, y_test, 50, temperature_scaling * first_temperature)))
-    reliability_diagram(calibrated_prediction, y_test, "after_second_calibration")
-
-    return temperature_scaling * first_temperature
+def calibrate_on_test(model_path, x_test, y_test):
+    logit_model = get_logits_friendly_model(load_model(model_path))
+    return calibrate(logit_model, x_test, y_test)
