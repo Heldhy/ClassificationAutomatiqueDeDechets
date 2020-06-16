@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from matplotlib.pyplot import figure, tight_layout, savefig,  plot
+from matplotlib.pyplot import figure, tight_layout, savefig, plot
 from numpy import argmax, zeros
 from sklearn.calibration import calibration_curve
 from tensorflow.python import convert_to_tensor, float32, int32, Variable, reduce_mean, divide
@@ -99,3 +99,24 @@ def calibrate_model(model_path, val_generator):
     reliability_diagram(calibrated_prediction, y_val, "after_calibration")
 
     return temperature_scaling
+
+
+def calibrate_on_test(model_path, x_test, y_test, first_temperature=1):
+    logit_model = get_logits_friendly_model(load_model(model_path))
+    uncalibrated_prediction = logit_model.predict(x_test) / first_temperature
+
+    print("ECE before calibration: " + str(compute_ECE(logit_model, x_test, y_test, 50, first_temperature)))
+    reliability_diagram(uncalibrated_prediction, y_test, "before_second_calibration")
+
+    temperature_scaling = compute_temperature_scaling(logit_model, x_test, y_test)
+
+    prediction = logit_model.predict(x_test)
+    calibrated_logits = prediction / (first_temperature * temperature_scaling)
+    calibrated_prediction = softmax(calibrated_logits)
+
+    print("scaling by " + str(temperature_scaling))
+    print("ECE after calibration: " + str(
+        compute_ECE(logit_model, x_test, y_test, 50, temperature_scaling * first_temperature)))
+    reliability_diagram(calibrated_prediction, y_test, "after_second_calibration")
+
+    return temperature_scaling * first_temperature
