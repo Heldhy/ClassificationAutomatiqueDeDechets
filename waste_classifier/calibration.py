@@ -103,7 +103,8 @@ def calibrate_model(model_path, val_generator):
 
 def calibrate_on_test(model_path, x_test, y_test, first_temperature=1):
     logit_model = get_logits_friendly_model(load_model(model_path))
-    uncalibrated_prediction = logit_model.predict(x_test) / first_temperature
+    uncalibrated_logits = logit_model.predict(x_test) / first_temperature
+    uncalibrated_prediction = softmax(uncalibrated_logits)
 
     print("ECE before calibration: " + str(compute_ECE(logit_model, x_test, y_test, 50, first_temperature)))
     reliability_diagram(uncalibrated_prediction, y_test, "before_second_calibration")
