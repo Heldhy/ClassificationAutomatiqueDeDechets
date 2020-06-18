@@ -17,7 +17,8 @@ filepath = "bestmodel.h5"
 filepath_logit = "bestmodel_logits.h5"
 
 
-from .pre_processing import make_image_square, get_preprocessed_data, get_data, pre_processing
+from .pre_processing import make_image_square, get_preprocessed_data, get_data, pre_processing, \
+    get_un_pre_processed_test_data
 from .data_augmentation import create_new_generator, save_generated_batch
 from .choose_model import return_frozen_mobilenet, add_classification_layer
 from .training import create_callbacks_list, compile_model, fit, evaluate_model, get_optimizer, \

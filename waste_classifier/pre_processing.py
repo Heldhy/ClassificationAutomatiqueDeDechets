@@ -54,3 +54,20 @@ def pre_processing(directory=None):
     random_permutation_to_apply = np.random.permutation(len(y_train))
     x_train, y_train = x_train[random_permutation_to_apply], y_train[random_permutation_to_apply]
     return x_train, y_train, x_test, y_test
+
+
+def get_un_pre_processed_test_data(directory=None):
+    if directory is None:
+        directory = BASE_DIR
+    path = directory / 'test'
+    x_data = []
+    y_data = []
+    path_to_data = Path(path)
+    files = sorted(path_to_data.iterdir())
+    for directories in files:
+        for images in sorted(directories.iterdir()):
+            img = imread(images)
+            img = make_image_square(img)
+            x_data.append(img)
+            y_data.append(CLASS_TO_INDEX[directories.name])
+    return np.array(x_data), np.array(y_data)
