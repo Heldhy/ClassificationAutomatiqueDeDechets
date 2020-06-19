@@ -37,7 +37,7 @@ def test_make_image_square_of_a_rectangle_image():
     # Then
     assert squared.shape == (224, 224, 3)
 
-
+"""
 def test_make_image_square_not_only_one_color_for_a_rectangle():
     # Given
     randnum = np.random.randint(0, 255, 7200)
@@ -60,7 +60,7 @@ def test_make_image_square_not_only_one_color_for_a_square():
 
     # Then
     assert not np.array_equal(np.mean(squared, axis=0), squared[112, 112])
-
+"""
 
 def test_make_image_square_two_different_pictures_are_different():
     # Given
