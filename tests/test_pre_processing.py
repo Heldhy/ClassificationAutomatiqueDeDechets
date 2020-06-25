@@ -1,7 +1,6 @@
 import numpy as np
 
-from pre_processing import make_image_square
-
+from waste_classifier.pre_processing import make_image_square
 
 def test_make_image_square_of_a_squared_picture():
     # Given

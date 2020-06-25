@@ -9,6 +9,11 @@ from waste_classifier import batch_size, CLASSES, HEIGHT, WIDTH
 
 
 def create_new_generator(x_train, y_train):
+    """
+    The parameters of the ImageDataGenerator have been chosen empirically to give the best accuracy and recall after
+    training the model
+    :return: a tuple of iterators to pass to the model for training
+    """
     datagen = ImageDataGenerator(rotation_range=20,
                                  validation_split=0.2,
                                  width_shift_range=0.2,
