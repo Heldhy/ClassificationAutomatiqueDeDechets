@@ -7,7 +7,8 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import RMSprop
 
-from waste_classifier import filepath, batch_size, return_frozen_mobilenet, add_classification_layer
+from choose_model import return_frozen_mobilenet, add_classification_layer
+from waste_classifier import filepath, batch_size
 
 
 def create_callbacks_list():
@@ -46,7 +47,7 @@ def get_optimizer(lr=0.00005):
 def training_visualisation(history, nb_epoch, title, path="learning_curves"):
     nb_epoch += 1
     path_to_save_at = Path(path)
-    if (not path_to_save_at.exists()):
+    if not path_to_save_at.exists():
         path_to_save_at.mkdir(parents=True)
     figure_plot, (ax1, ax2, ax3) = subplots(1, 3, figsize=(20, 6))
     figure_plot.suptitle('MobileNet Performances', fontsize=12)
@@ -97,7 +98,7 @@ def training_with_fine_tuning(train_generator, val_generator, x_test, y_test, ev
     training_visualisation(history, 100, "fine_tuning")
     model = load_model(filepath)
 
-    if (evaluate):
+    if evaluate:
         score = evaluate_model(model, x_test, y_test)
         print('Test score:', score[0])
         print('Test accuracy:', score[1])

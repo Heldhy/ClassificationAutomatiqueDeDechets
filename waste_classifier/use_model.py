@@ -3,7 +3,9 @@ from matplotlib.pyplot import imread
 from tensorflow.python.keras.applications.mobilenet import preprocess_input
 from tensorflow.python.ops.nn_ops import softmax
 
-from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE, make_image_square, get_logits_friendly_model
+from calibration import get_logits_friendly_model
+from pre_processing import make_image_square
+from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE
 
 
 def return_trash_label(previous_label):

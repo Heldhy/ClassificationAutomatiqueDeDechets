@@ -1,7 +1,7 @@
 import numpy as np
 from tensorflow.python.keras.utils.np_utils import to_categorical
 
-from waste_classifier import convert_to_trash
+from post_processing import convert_to_trash
 
 
 def test_convert_to_trash_returns_only_3_categories():

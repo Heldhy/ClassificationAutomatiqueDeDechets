@@ -29,8 +29,8 @@ class AdaptedConfusionMatrix:
         self.mode = mode
 
     def soft_recall(self):
-        if (self.mode == "fluide"):
-            if ((self.TP + self.AN)):
+        if self.mode == "fluide":
+            if self.TP + self.AN:
                 alpha = max(1 / (self.TP + self.AN), self.TP / (self.TP + self.AN))
             else:
                 alpha = 0
@@ -45,7 +45,7 @@ class AdaptedConfusionMatrix:
                 self.Precision + self.Recall)
 
     def __str__(self):
-        if (self.SoftRecall == 0):
+        if self.SoftRecall == 0:
             self.soft_recall()
         r = "{: <13}{: >6d}{: >6d}{: >6d}{: >10.2f}{: >10.2f}{: >10.2f}{: >10.2f}".format(self.name, self.TP, self.AN,
                                                                                           self.FN, self.Precision,
@@ -75,10 +75,12 @@ class ConfusionSoftRecall:
         sum_elements = 0
         for current_class in self.class_name:
             self.confusion_matrix_list[current_class].soft_recall()
-            sum_recall += nb_of_true_samples_for_classes[current_class] * self.confusion_matrix_list[current_class].Recall
+            sum_recall += nb_of_true_samples_for_classes[current_class] * self.confusion_matrix_list[
+                current_class].Recall
             recall += self.confusion_matrix_list[current_class].Recall
             sum_soft_recall += self.confusion_matrix_list[current_class].SoftRecall
-            weighted_soft_recall += nb_of_true_samples_for_classes[current_class] * self.confusion_matrix_list[current_class].SoftRecall
+            weighted_soft_recall += nb_of_true_samples_for_classes[current_class] * self.confusion_matrix_list[
+                current_class].SoftRecall
             sum_elements += nb_of_true_samples_for_classes[current_class]
 
         self.SoftRecall = sum_soft_recall / len(self.class_name)
@@ -109,11 +111,11 @@ def soft_recall_function(ypred, ytrue, d, classes):
 
         nb_of_true_samples_for_classes[true_label] = nb_of_true_samples_for_classes[true_label] + 1
 
-        if (predicted_label == true_label):
+        if predicted_label == true_label:
             confusion_sof_recall.confusion_matrix_list[true_label].TP += 1
         else:
             confusion_sof_recall.confusion_matrix_list[predicted_label].FP += 1
-            if (matrix[true_label][predicted_label]):
+            if matrix[true_label][predicted_label]:
                 confusion_sof_recall.confusion_matrix_list[true_label].AN += 1
             else:
                 confusion_sof_recall.confusion_matrix_list[true_label].FN += 1

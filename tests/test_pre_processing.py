@@ -1,5 +1,6 @@
-from waste_classifier import make_image_square
 import numpy as np
+
+from pre_processing import make_image_square
 
 
 def test_make_image_square_of_a_squared_picture():
@@ -37,30 +38,6 @@ def test_make_image_square_of_a_rectangle_image():
     # Then
     assert squared.shape == (224, 224, 3)
 
-"""
-def test_make_image_square_not_only_one_color_for_a_rectangle():
-    # Given
-    randnum = np.random.randint(0, 255, 7200)
-    img = randnum.reshape((60, 40, 3))
-
-    # When
-    squared = make_image_square(img)
-
-    # Then
-    assert not np.array_equal(np.mean(squared, axis=0), squared[112, 112])
-
-
-def test_make_image_square_not_only_one_color_for_a_square():
-    # Given
-    randnum = np.random.randint(0, 255, 7500)
-    img = randnum.reshape((50, 50, 3))
-
-    # When
-    squared = make_image_square(img)
-
-    # Then
-    assert not np.array_equal(np.mean(squared, axis=0), squared[112, 112])
-"""
 
 def test_make_image_square_two_different_pictures_are_different():
     # Given
