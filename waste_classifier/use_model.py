@@ -27,6 +27,6 @@ def predict_image(model, path, temperature_scaling=1):
     max_index = np.argmax(prediction)
     second_max_index = prediction_list.index(max(prediction_list[:max_index] + prediction_list[max_index + 1:]))
     trash = return_trash_label(max_index)
-    print(CLASSES[max_index] + ": " + str(max(prediction_list) * 100)[:5] + "%")
-    print(CLASSES[second_max_index] + ": " + str(prediction_list[second_max_index] * 100)[:5] + "%")
+    print(CLASSES[max_index] + ": " + str(round(max(prediction_list) * 100, 2)) + "%")
+    print(CLASSES[second_max_index] + ": " + str(round(prediction_list[second_max_index] * 100, 2)) + "%")
     return WASTE_TYPE[trash]
