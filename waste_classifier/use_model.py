@@ -3,8 +3,8 @@ from matplotlib.pyplot import imread
 from tensorflow.python.keras.applications.mobilenet import preprocess_input
 from tensorflow.python.ops.nn_ops import softmax
 
-from calibration import get_logits_friendly_model
-from pre_processing import make_image_square
+from waste_classifier.calibration import get_logits_friendly_model
+from waste_classifier.pre_processing import make_image_square
 from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE, CLASSES_TO_TRASH
 
 
