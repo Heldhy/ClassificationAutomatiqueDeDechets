@@ -1,4 +1,4 @@
-from use_model import return_trash_label
+from waste_classifier.use_model import return_trash_label
 
 
 def test_return_trash_label_returns_zero_for_label_zero():
