@@ -10,7 +10,7 @@ from tensorflow.python.keras.optimizer_v2.adam import Adam
 from tensorflow.python.ops.nn_ops import softmax, softmax_cross_entropy_with_logits_v2
 from tensorflow_probability.python.stats import expected_calibration_error
 
-from training import compile_model
+from waste_classifier.training import compile_model
 from waste_classifier import NB_CLASSES, CLASSES
 
 
