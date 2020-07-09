@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from numpy import argmax, ndarray
 
-from confusion_soft_recall import ConfusionSoftRecall
+from waste_classifier.confusion_soft_recall import ConfusionSoftRecall
 
 
 def acceptable_dict_to_matrix(acceptable_negative_table: Dict[str, List[str]], index_to_class_table: List[str]):

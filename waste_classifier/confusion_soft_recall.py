@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from adapted_confusion_matrix import AdaptedConfusionMatrix
+from waste_classifier.adapted_confusion_matrix import AdaptedConfusionMatrix
 
 
 class ConfusionSoftRecall:
