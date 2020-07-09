@@ -140,7 +140,7 @@ def test_soft_recall_function_weight_recall():
     expected_value = 0.1891891891891892
 
     # When
-    returned_value = soft_recall_function(predictions, true, an_table, classes).WeightRecall
+    returned_value = soft_recall_function(predictions, true, an_table, classes).weight_recall
 
     # Then
     assert returned_value == expected_value
@@ -159,7 +159,7 @@ def test_soft_recall_function_soft_recall():
     expected_value = 0.30791666666666667
 
     # When
-    returned_value = soft_recall_function(predictions, true, an_table, classes).SoftRecall
+    returned_value = soft_recall_function(predictions, true, an_table, classes).soft_recall
 
     # Then
     assert returned_value == expected_value
@@ -178,7 +178,7 @@ def test_soft_recall_function_recall():
     expected_value = 0.19464285714285715
 
     # When
-    returned_value = soft_recall_function(predictions, true, an_table, classes).Recall
+    returned_value = soft_recall_function(predictions, true, an_table, classes).recall
 
     # Then
     assert returned_value == expected_value
@@ -197,7 +197,7 @@ def test_soft_recall_function_weight_soft_recall():
     expected_value = 0.2972972972972973
 
     # When
-    returned_value = soft_recall_function(predictions, true, an_table, classes).WeightSoftRecall
+    returned_value = soft_recall_function(predictions, true, an_table, classes).weight_soft_recall
 
     # Then
     assert returned_value == expected_value

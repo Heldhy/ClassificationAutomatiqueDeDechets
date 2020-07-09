@@ -5,7 +5,8 @@ with open("requirements.txt", "r") as requirement_file:
 
 setup(
     name='WasteClassifier',
-    version='1.0.0',
+    python_requires='>=3.8',
+    version='1.6.0',
     packages=find_packages(exclude=['tests.*', 'tests']),
     url='',
     license='',

@@ -28,19 +28,20 @@ class AdaptedConfusionMatrix:
         """
         self.name = name
         self.mode = mode
-        self.TP = 0
-        self.FP = 0
-        self.FN = 0
-        self.AN = 0
-        self.SoftRecall = 0
-        self.Precision = 0
-        self.Recall = 0
-        self.F1_score = 0
+        self.true_positive = 0
+        self.false_positive = 0
+        self.false_negative = 0
+        self.acceptable_negative = 0
+        self.soft_recall = 0
+        self.precision = 0
+        self.recall = 0
+        self.f1_score = 0
 
     def compute(self):
         if self.mode == "adaptive":
-            if self.TP + self.AN:
-                alpha = max(1 / (self.TP + self.AN), self.TP / (self.TP + self.AN))
+            if self.true_positive + self.acceptable_negative:
+                alpha = max(1 / (self.true_positive + self.acceptable_negative),
+                            self.true_positive / (self.true_positive + self.acceptable_negative))
             else:
                 alpha = 0
         elif self.mode == "fixed":
@@ -48,20 +49,26 @@ class AdaptedConfusionMatrix:
         else:
             raise Exception("mode must be either 'adaptive' or 'fixed', not '{:d}'", self.mode)
 
-        fraction = 1 if (self.TP + self.AN + self.FN) == 0 else self.TP + self.AN + self.FN
-        self.SoftRecall = (self.TP + alpha * self.AN) / fraction
-        self.Recall = self.TP / fraction
-        self.Precision = 0 if (self.TP + self.FP) == 0 else self.TP / (self.TP + self.FP)
-        self.F1_score = 0 if (self.Precision + self.Recall) == 0 else 2 * (self.Recall * self.Precision) / (
-                self.Precision + self.Recall)
+        if (self.true_positive + self.acceptable_negative + self.false_negative) == 0:
+            fraction = 1
+        else:
+            fraction = self.true_positive + self.acceptable_negative + self.false_negative
+        self.soft_recall = (self.true_positive + alpha * self.acceptable_negative) / fraction
+        self.recall = self.true_positive / fraction
+        self.precision = 0 if (self.true_positive + self.false_positive) == 0 else self.true_positive / (
+                self.true_positive + self.false_positive)
+        self.f1_score = 0 if (self.precision + self.recall) == 0 else 2 * (self.recall * self.precision) / (
+                self.precision + self.recall)
 
     def __str__(self):
         self.compute()
-        return "{: <13}{: >6d}{: >6d}{: >6d}{: >10.2f}{: >10.2f}{: >10.2f}{: >10.2f}".format(self.name, self.TP,
-                                                                                             self.AN,
-                                                                                             self.FN, self.Precision,
-                                                                                             self.Recall, self.F1_score,
-                                                                                             self.SoftRecall)
+        return "{: <13}{: >6d}{: >6d}{: >6d}{: >10.2f}{: >10.2f}{: >10.2f}{: >10.2f}".format(self.name,
+                                                                                             self.true_positive,
+                                                                                             self.acceptable_negative,
+                                                                                             self.false_negative,
+                                                                                             self.precision,
+                                                                                             self.recall, self.f1_score,
+                                                                                             self.soft_recall)
 
 
 class ConfusionSoftRecall:
@@ -73,10 +80,10 @@ class ConfusionSoftRecall:
         """
 
         self.index_to_class_table = index_to_class_table
-        self.WeightRecall = 0
-        self.SoftRecall = 0
-        self.Recall = 0
-        self.WeightSoftRecall = 0
+        self.weight_recall = 0
+        self.soft_recall = 0
+        self.recall = 0
+        self.weight_soft_recall = 0
         self.confusion_matrix_list = {}
         for current_class in index_to_class_table:
             self.confusion_matrix_list[current_class] = AdaptedConfusionMatrix(current_class)
@@ -95,25 +102,25 @@ class ConfusionSoftRecall:
         for current_class in self.index_to_class_table:
             self.confusion_matrix_list[current_class].compute()
             unweighted_sum_of_recall += nb_of_true_samples_for_classes[current_class] * self.confusion_matrix_list[
-                current_class].Recall
-            sum_of_recall += self.confusion_matrix_list[current_class].Recall
-            sum_of_soft_recall += self.confusion_matrix_list[current_class].SoftRecall
+                current_class].recall
+            sum_of_recall += self.confusion_matrix_list[current_class].recall
+            sum_of_soft_recall += self.confusion_matrix_list[current_class].soft_recall
             unweighted_sum_of_soft_recall += nb_of_true_samples_for_classes[current_class] * self.confusion_matrix_list[
-                current_class].SoftRecall
+                current_class].soft_recall
             sum_of_elements += nb_of_true_samples_for_classes[current_class]
 
         nb_classes = len(self.index_to_class_table)
-        self.SoftRecall = sum_of_soft_recall / nb_classes
-        self.WeightSoftRecall = unweighted_sum_of_soft_recall / sum_of_elements
-        self.Recall = sum_of_recall / nb_classes
-        self.WeightRecall = unweighted_sum_of_recall / sum_of_elements
+        self.soft_recall = sum_of_soft_recall / nb_classes
+        self.weight_soft_recall = unweighted_sum_of_soft_recall / sum_of_elements
+        self.recall = sum_of_recall / nb_classes
+        self.weight_recall = unweighted_sum_of_recall / sum_of_elements
 
     def __str__(self):
         returned_string = 17 * " " + "TP    AN    FN   Precision   Recall  F1 score   SoftRecall\n"
         for current_class in self.index_to_class_table:
             returned_string += str(self.confusion_matrix_list[current_class]) + "\n"
-        returned_string += "--\nSoftRecall\t\t\t" + str(round(self.SoftRecall, 2))
-        returned_string += "\nWeightedSoftRecall\t" + str(round(self.WeightSoftRecall, 2))
+        returned_string += "--\nSoftRecall\t\t\t" + str(round(self.soft_recall, 2))
+        returned_string += "\nWeightedSoftRecall\t" + str(round(self.weight_soft_recall, 2))
         return returned_string
 
 
@@ -133,13 +140,13 @@ def soft_recall_function(ypred: ndarray, ytrue: ndarray, acceptable_negative_tab
         nb_of_true_samples_for_classes[true_label] += 1
 
         if predicted_label == true_label:
-            confusion_soft_recall.confusion_matrix_list[true_label].TP += 1
+            confusion_soft_recall.confusion_matrix_list[true_label].true_positive += 1
         else:
-            confusion_soft_recall.confusion_matrix_list[predicted_label].FP += 1
+            confusion_soft_recall.confusion_matrix_list[predicted_label].false_positive += 1
             if is_acceptable_negative_matrix[true_label][predicted_label]:
-                confusion_soft_recall.confusion_matrix_list[true_label].AN += 1
+                confusion_soft_recall.confusion_matrix_list[true_label].acceptable_negative += 1
             else:
-                confusion_soft_recall.confusion_matrix_list[true_label].FN += 1
+                confusion_soft_recall.confusion_matrix_list[true_label].false_negative += 1
 
     confusion_soft_recall.compute(nb_of_true_samples_for_classes)
     return confusion_soft_recall
