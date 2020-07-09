@@ -5,7 +5,7 @@ from sklearn.metrics import accuracy_score, recall_score
 from waste_classifier import CLASSES, CLASSES_TO_TRASH
 
 
-def convert_to_trash(prediction,  y):
+def convert_to_trash(prediction: np.ndarray, y: np.ndarray) -> (np.ndarray, np.ndarray):
     y_predicted = []
     y_true = []
     for i in range(len(prediction)):
@@ -18,12 +18,12 @@ def convert_to_trash(prediction,  y):
     return y_predicted, y_true
 
 
-def predict_and_convert_to_trash(model, x, y):
+def predict_and_convert_to_trash(model, x: np.ndarray, y: np.ndarray) -> (np.ndarray, np.ndarray):
     prediction = model.predict(x)
     return convert_to_trash(prediction, y)
 
 
-def evaluate_post_processed_prediction(model, x, y):
+def evaluate_post_processed_prediction(model, x: np.ndarray, y: np.ndarray) -> (float, float):
     y_predicted, y_true = predict_and_convert_to_trash(model, x, y)
     accuracy = accuracy_score(y_true, y_predicted)
     recall = recall_score(y_true, y_predicted, average='macro')

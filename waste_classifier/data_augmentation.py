@@ -1,14 +1,14 @@
 from pathlib import Path
 
 from matplotlib.pyplot import figure, tight_layout, imshow, savefig
-from numpy import argmax
+from numpy import argmax, ndarray
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.python.keras.applications.mobilenet import preprocess_input
 
 from waste_classifier import batch_size, CLASSES, HEIGHT, WIDTH
 
 
-def create_new_generator(x_train, y_train):
+def create_new_generator(x_train: ndarray, y_train: ndarray):
     """
     The parameters of the ImageDataGenerator have been chosen empirically to give the best accuracy and recall after
     training the model
@@ -30,7 +30,7 @@ def create_new_generator(x_train, y_train):
     return train_generator, val_generator
 
 
-def save_generated_batch(generator, batch_number, path="batch_images"):
+def save_generated_batch(generator, batch_number: int, path: str = "batch_images"):
     path_to_save_at = Path(path)
     if not path_to_save_at.exists():
         path_to_save_at.mkdir(parents=True)

@@ -5,18 +5,24 @@ from tensorflow.python.ops.nn_ops import softmax
 
 from calibration import get_logits_friendly_model
 from pre_processing import make_image_square
-from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE
+from waste_classifier import HEIGHT, WIDTH, CLASSES, WASTE_TYPE, CLASSES_TO_TRASH
 
 
-def return_trash_label(previous_label):
-    if previous_label in {0, 2, 3, 4}:
-        return 0
-    if previous_label == 1:
-        return 1
-    return 2
+def return_trash_label(label_number: int) -> int:
+    """
+    :param label_number: the label of each class
+        - cardboard: 0
+        - glass: 1
+        - metal: 2
+        - paper: 3
+        - plastic: 4
+        - trash: 5
+    :return: the new label corresponding to recyclable, verre or non recyclable
+    """
+    return CLASSES_TO_TRASH[CLASSES[label_number]]
 
 
-def predict_image(model, path, temperature_scaling=1):
+def predict_image(model, path: str, temperature_scaling: float = 1.0) -> str:
     source_img = imread(path)
     img = preprocess_input(make_image_square(source_img))
     logit_model = get_logits_friendly_model(model)

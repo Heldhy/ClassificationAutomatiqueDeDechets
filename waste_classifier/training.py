@@ -1,7 +1,9 @@
 from pathlib import Path
+from typing import List
 
 import tensorflow as tf
 from matplotlib.pyplot import subplots, savefig
+from numpy import ndarray
 from numpy.ma import arange
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import load_model
@@ -24,7 +26,7 @@ def compile_model(model, optimizer):
                   )
 
 
-def fit(model, train_generator, val_generator, callbacks, epoch):
+def fit(model, train_generator, val_generator, callbacks, epoch: int):
     history = model.fit_generator(train_generator,
                                   steps_per_epoch=train_generator.n // batch_size,
                                   validation_steps=val_generator.n // batch_size,
@@ -35,16 +37,16 @@ def fit(model, train_generator, val_generator, callbacks, epoch):
     return history
 
 
-def evaluate_model(model, x_test, y_test):
+def evaluate_model(model, x_test: ndarray, y_test: ndarray) -> List[float]:
     score = model.evaluate(x_test, y_test, verbose=0)
     return score
 
 
-def get_optimizer(lr=0.00005):
+def get_optimizer(lr: float = 0.00005):
     return RMSprop(lr=lr)
 
 
-def training_visualisation(history, nb_epoch, title, path="learning_curves"):
+def training_visualisation(history, nb_epoch: int, title: str, path: str = "learning_curves"):
     nb_epoch += 1
     path_to_save_at = Path(path)
     if not path_to_save_at.exists():
@@ -80,7 +82,7 @@ def training_visualisation(history, nb_epoch, title, path="learning_curves"):
     savefig(path_to_save_at / title)
 
 
-def training_with_fine_tuning(train_generator, val_generator, x_test, y_test, evaluate=False):
+def training_with_fine_tuning(train_generator, val_generator, x_test: ndarray, y_test: ndarray, evaluate: bool = False):
     base_model = return_frozen_mobilenet()
     model = add_classification_layer(base_model)
     callbacks = create_callbacks_list()

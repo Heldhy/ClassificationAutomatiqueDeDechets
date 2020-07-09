@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from matplotlib.pyplot import figure, tight_layout, savefig, plot
-from numpy import argmax, zeros
+from numpy import argmax, zeros, ndarray
 from sklearn.calibration import calibration_curve
 from tensorflow.python import convert_to_tensor, float32, int32, Variable, reduce_mean, divide
 from tensorflow.python.keras.applications.mobilenet import preprocess_input
@@ -14,7 +14,7 @@ from training import compile_model
 from waste_classifier import NB_CLASSES, CLASSES
 
 
-def from_multiclass_to_one_vs_all(y_test, considerate_class):
+def from_multiclass_to_one_vs_all(y_test: ndarray, considerate_class: int) -> ndarray:
     y_res = zeros((len(y_test), 1))
     for i in range(len(y_test)):
         if argmax(y_test[i]) == considerate_class:
@@ -24,7 +24,7 @@ def from_multiclass_to_one_vs_all(y_test, considerate_class):
     return y_res
 
 
-def reliability_diagram(prediction, y, name, path='reliability_diagram'):
+def reliability_diagram(prediction: ndarray, y: ndarray, name: str, path: str = 'reliability_diagram'):
     path_to_save_at = Path(path)
     if not path_to_save_at.exists():
         path_to_save_at.mkdir(parents=True)
@@ -48,7 +48,7 @@ def get_logits_friendly_model(model):
     return model
 
 
-def compute_ECE(logit_model, x, y, num_bins, temperature_scaling=1):
+def compute_ECE(logit_model, x: ndarray, y: ndarray, num_bins: int, temperature_scaling: float = 1.0) -> float:
     prediction = logit_model.predict(x)
     prediction_scaled = prediction / temperature_scaling
     logits = convert_to_tensor(prediction_scaled, dtype=float32, name='logits')
@@ -57,7 +57,7 @@ def compute_ECE(logit_model, x, y, num_bins, temperature_scaling=1):
     return ece.numpy()
 
 
-def compute_temperature_scaling(logit_model, x, y):
+def compute_temperature_scaling(logit_model, x: ndarray, y: ndarray) -> float:
     temp = Variable(initial_value=1.0, trainable=True, dtype=float32)
     logits = logit_model.predict(x)
 
@@ -73,7 +73,7 @@ def compute_temperature_scaling(logit_model, x, y):
     return temp.numpy()
 
 
-def calibrate(logit_model, x, y):
+def calibrate(logit_model, x: ndarray, y: ndarray) -> float:
     uncalibrated_logits = logit_model.predict(x)
     uncalibrated_prediction = softmax(uncalibrated_logits)
 
@@ -91,7 +91,7 @@ def calibrate(logit_model, x, y):
     return temperature_scaling
 
 
-def calibrate_on_validation(model_path, val_generator):
+def calibrate_on_validation(model_path: str, val_generator) -> float:
     logit_model = get_logits_friendly_model(load_model(model_path))
     x_val = val_generator.x
     y_val = val_generator.y
@@ -99,6 +99,6 @@ def calibrate_on_validation(model_path, val_generator):
     return calibrate(logit_model, x_val_pre, y_val)
 
 
-def calibrate_on_test(model_path, x_test, y_test):
+def calibrate_on_test(model_path: str, x_test: ndarray, y_test: ndarray) -> float:
     logit_model = get_logits_friendly_model(load_model(model_path))
     return calibrate(logit_model, x_test, y_test)
