@@ -18,7 +18,7 @@ def test_convert_to_trash_returns_only_3_categories():
     assert y_trash.shape[1] == 3
 
 
-def test_convert_to_trash_cardboard_converted_to_recyclable():
+def test_convert_to_trash_converts_cardboard_to_recyclable():
     # Given
     y_pred = np.full((100, 1), 0)
     y = np.full((100, 1), 0)
@@ -35,7 +35,7 @@ def test_convert_to_trash_cardboard_converted_to_recyclable():
     assert np.array_equal(np.round(y_trash), expected_result)
 
 
-def test_convert_to_trash_glass_converted_to_verre():
+def test_convert_to_trash_converts_glass_to_verre():
     # Given
     y_pred = np.full((100, 1), 1)
     y = np.full((100, 1), 1)
@@ -52,7 +52,7 @@ def test_convert_to_trash_glass_converted_to_verre():
     assert (np.array_equal(np.round(y_trash), expected_result))
 
 
-def test_convert_to_trash_metal_converted_to_recyclable():
+def test_convert_to_trash_converts_metal_to_recyclable():
     # Given
     y_pred = np.full((100, 1), 2)
     y = np.full((100, 1), 2)
@@ -69,7 +69,7 @@ def test_convert_to_trash_metal_converted_to_recyclable():
     assert np.array_equal(np.round(y_trash), expected_result)
 
 
-def test_convert_to_trash_paper_converted_to_recyclable():
+def test_convert_to_trash_converts_paper_to_recyclable():
     # Given
     y_pred = np.full((100, 1), 3)
     y = np.full((100, 1), 3)
@@ -86,7 +86,7 @@ def test_convert_to_trash_paper_converted_to_recyclable():
     assert np.array_equal(np.round(y_trash), expected_result)
 
 
-def test_convert_to_trash_plastic_converted_to_recyclable():
+def test_convert_to_trash_converts_plastic_to_recyclable():
     # Given
     y_pred = np.full((100, 1), 4)
     y = np.full((100, 1), 4)
@@ -103,7 +103,7 @@ def test_convert_to_trash_plastic_converted_to_recyclable():
     assert np.array_equal(np.round(y_trash), expected_result)
 
 
-def test_convert_to_trash_trash_converted_to_non_recyclable():
+def test_convert_to_trash_converts_trash_to_non_recyclable():
     # Given
     y_pred = np.full((100, 1), 5)
     y = np.full((100, 1), 5)

@@ -108,7 +108,8 @@ def fixture_classes():
     return ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
 
 
-def test_acceptable_dict_to_matrix(fixture_acceptable_negative_table, fixture_classes):
+def test_acceptable_dict_to_matrix_returns_the_right_matrix_for_the_waste_classification_problem(
+        fixture_acceptable_negative_table, fixture_classes):
     # Given
     expected_dict = {
         'cardboard': {'cardboard': False, 'glass': False, 'metal': True, 'paper': True, 'plastic': True, 'trash': True},
@@ -125,7 +126,7 @@ def test_acceptable_dict_to_matrix(fixture_acceptable_negative_table, fixture_cl
     assert returned_dict == expected_dict
 
 
-def test_get_class(fixture_classes):
+def test_get_class_returns_paper_when_the_max_index_is_the_fourth_one(fixture_classes):
     # Given
     pseudo_prediction = np.array([0.01, 0.3, 0.00076, 0.5, 0.1, 0.05])
     expected_class = "paper"
@@ -137,8 +138,10 @@ def test_get_class(fixture_classes):
     assert returned_class == expected_class
 
 
-def test_soft_recall_function_weight_recall(fixture_prediction_array, fixture_true_array,
-                                            fixture_acceptable_negative_table, fixture_classes):
+def test_soft_recall_function_returns_the_right_weight_recall_for_the_given_predictions(fixture_prediction_array,
+                                                                                        fixture_true_array,
+                                                                                        fixture_acceptable_negative_table,
+                                                                                        fixture_classes):
     # Given
     expected_value = 0.1891891891891892
 
@@ -150,8 +153,10 @@ def test_soft_recall_function_weight_recall(fixture_prediction_array, fixture_tr
     assert returned_value == expected_value
 
 
-def test_soft_recall_function_soft_recall(fixture_prediction_array, fixture_true_array,
-                                          fixture_acceptable_negative_table, fixture_classes):
+def test_soft_recall_function_returns_the_right_soft_recall_for_the_given_predictions(fixture_prediction_array,
+                                                                                      fixture_true_array,
+                                                                                      fixture_acceptable_negative_table,
+                                                                                      fixture_classes):
     # Given
     expected_value = 0.30791666666666667
 
@@ -163,8 +168,10 @@ def test_soft_recall_function_soft_recall(fixture_prediction_array, fixture_true
     assert returned_value == expected_value
 
 
-def test_soft_recall_function_recall(fixture_prediction_array, fixture_true_array, fixture_acceptable_negative_table,
-                                     fixture_classes):
+def test_soft_recall_function_returns_the_right_recall_for_the_given_predictions(fixture_prediction_array,
+                                                                                 fixture_true_array,
+                                                                                 fixture_acceptable_negative_table,
+                                                                                 fixture_classes):
     # Given
     expected_value = 0.19464285714285715
 
@@ -176,8 +183,10 @@ def test_soft_recall_function_recall(fixture_prediction_array, fixture_true_arra
     assert returned_value == expected_value
 
 
-def test_soft_recall_function_weight_soft_recall(fixture_prediction_array, fixture_true_array,
-                                                 fixture_acceptable_negative_table, fixture_classes):
+def test_soft_recall_function_returns_the_right_weight_soft_recall(fixture_prediction_array,
+                                                                   fixture_true_array,
+                                                                   fixture_acceptable_negative_table,
+                                                                   fixture_classes):
     # Given
     expected_value = 0.2972972972972973
 
