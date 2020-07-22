@@ -14,5 +14,5 @@ WIDTH = 224
 HEIGHT = 224
 batch_size = 64
 filepath = "bestmodel.h5"
-filepath_logit = "bestmodel_logits.h5"
+filepath_logit = "logits_model.h5"
 
